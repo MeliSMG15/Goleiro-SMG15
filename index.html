@@ -351,10 +351,15 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
 const SHEET_ID='1hRVnx-G2Kw_ZoHYzCGyju914PrB2fGIKZgSHIjm8GxE',GID='1012863278';
 const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
-const STORE='goleiro_smg15_v3';
+// Firebase config
+const FB_CFG={apiKey:"AIzaSyCR-O8PWfKdTANDPnu59DeACPmAN-TrJsI",authDomain:"registrosmg15.firebaseapp.com",databaseURL:"https://registrosmg15-default-rtdb.firebaseio.com",projectId:"registrosmg15",storageBucket:"registrosmg15.firebasestorage.app",messagingSenderId:"353674201769",appId:"1:353674201769:web:14f0e14647e85875b4b7b8"};
+firebase.initializeApp(FB_CFG);
+const db=firebase.database();
 const CICLOS=['AM','PM'];
 const GS=['G1','G2','G3','G4'];
 const GNAMES={G1:'Goleiro 1',G2:'Goleiro 2',G3:'Goleiro 3',G4:'Goleiro 4'};
@@ -513,7 +518,7 @@ function logScan(ciclo,g,id,rota,rc,found){
   S[ciclo][g].log.unshift(e);
   if(S[ciclo][g].log.length>500)S[ciclo][g].log.pop();
   renderHist(ciclo);
-  saveStore(ciclo,g,e);
+  saveToFirebase(ciclo,g,e);
 }
 function renderHist(c){
   const g=activeG[c],el2=el('hl-'+c.toLowerCase()),log=S[c][g].log;
@@ -541,63 +546,67 @@ function downloadCSV(c){
   triggerDL('﻿'+hdr+'\n'+rows.join('\n'),`goleiro_${c}_${g}_${new Date().toISOString().slice(0,10)}.csv`);
 }
 
-// LocalStorage
-function loadStore(){try{return JSON.parse(localStorage.getItem(STORE)||'{}');}catch{return{};}}
-function saveStore(c,g,e){
-  try{
-    const d=loadStore(),date=e.ts.slice(0,10);
-    if(!d[date])d[date]={};if(!d[date][c])d[date][c]={};if(!d[date][c][g])d[date][c][g]=[];
-    d[date][c][g].unshift(e);
-    if(d[date][c][g].length>2000)d[date][c][g].pop();
-    const keys=Object.keys(d).sort();while(keys.length>60)delete d[keys.shift()];
-    localStorage.setItem(STORE,JSON.stringify(d));
-  }catch(err){console.warn('storage:',err);}
+// Firebase
+function saveToFirebase(c,g,e){
+  const date=e.ts.slice(0,10);
+  db.ref(`goleiro_smg15/bipagens/${date}/${c}/${g}`).push(e)
+    .catch(err=>console.warn('Firebase write error:',err));
 }
 
 // Histórico
 function today(){return new Date().toISOString().slice(0,10);}
-function searchHist(){
+let lastHistEntries=[];
+
+async function searchHist(){
   const date=el('hDate').value,c=el('hCiclo').value,gf=el('hGoleiro').value;
   if(!date)return;
-  const d=loadStore(),dd=d[date]||{};
-  let entries=[];
-  const ciclos=c==='todos'?CICLOS:[c];
-  const goleiros=gf==='todos'?GS:[gf];
-  for(const cc of ciclos)for(const gg of goleiros){
-    const list=(dd[cc]&&dd[cc][gg])||[];
-    entries.push(...list.map(e=>({...e,_c:cc,_g:gg})));
+  el('h-total').textContent='…';el('h-found').textContent='…';el('h-nr').textContent='…';
+  el('h-rb').innerHTML='<tr class="empty"><td colspan="3">Carregando...</td></tr>';
+  el('h-sb').innerHTML='<tr class="empty"><td colspan="5">Carregando...</td></tr>';
+  try{
+    const ciclos=c==='todos'?CICLOS:[c],goleiros=gf==='todos'?GS:[gf];
+    let entries=[];
+    for(const cc of ciclos){
+      for(const gg of goleiros){
+        const snap=await db.ref(`goleiro_smg15/bipagens/${date}/${cc}/${gg}`).get();
+        if(snap.exists()){
+          const vals=Object.values(snap.val());
+          entries.push(...vals.map(e=>({...e,_c:cc,_g:gg})));
+        }
+      }
+    }
+    entries.sort((a,b)=>b.ts.localeCompare(a.ts));
+    lastHistEntries=entries;
+    const tot=entries.length,fnd=entries.filter(e=>e.found).length;
+    el('h-total').textContent=tot;el('h-found').textContent=fnd;el('h-nr').textContent=tot-fnd;el('h-date').textContent=date;
+    const cm=new Map();
+    entries.filter(e=>e.found).forEach(e=>{const p=cm.get(e.rota)||{count:0,ciclo:e.rc||''};cm.set(e.rota,{count:p.count+1,ciclo:e.rc||''});});
+    const rs=[...cm.entries()].sort((a,b)=>b[1].count-a[1].count);
+    el('h-rb').innerHTML=rs.length?rs.map(([r,v])=>{const cc=v.ciclo||'',cl=cc==='AM'?'am':cc==='PM'?'pm':'';return`<tr><td class="rname">${esc(r)}</td><td>${cl?`<span class="cb ${cl}">${cc}</span>`:'—'}</td><td><span class="cnt">${v.count}</span></td></tr>`;}).join(''):'<tr class="empty"><td colspan="3">Sem dados</td></tr>';
+    el('h-sb').innerHTML=entries.length?entries.map(e=>{
+      const t=new Date(e.ts).toLocaleTimeString('pt-BR');
+      const s=e.found?'color:var(--green);font-weight:700':'color:var(--red);font-weight:700';
+      const cl=(e.rc||'').toLowerCase();
+      return`<tr><td style="font-family:monospace;font-size:.77rem">${t}</td><td style="font-family:monospace;font-size:.77rem">${esc(e.id)}</td><td style="${s}">${esc(e.rota)}</td><td>${cl?`<span class="cb ${cl}">${e.rc}</span>`:'—'}</td><td style="font-size:.8rem;color:var(--muted)">${GNAMES[e._g]||e._g}</td></tr>`;
+    }).join(''):'<tr class="empty"><td colspan="5">Sem dados</td></tr>';
+  }catch(err){
+    el('h-rb').innerHTML='<tr class="empty"><td colspan="3">Erro ao carregar</td></tr>';
+    el('h-sb').innerHTML='<tr class="empty"><td colspan="5">Erro: '+err.message+'</td></tr>';
   }
-  entries.sort((a,b)=>b.ts.localeCompare(a.ts));
-  const tot=entries.length,fnd=entries.filter(e=>e.found).length;
-  el('h-total').textContent=tot;el('h-found').textContent=fnd;el('h-nr').textContent=tot-fnd;el('h-date').textContent=date;
-  const cm=new Map();
-  entries.filter(e=>e.found).forEach(e=>{const p=cm.get(e.rota)||{count:0,ciclo:e.rc||''};cm.set(e.rota,{count:p.count+1,ciclo:e.rc||''});});
-  const rb=el('h-rb');
-  const rs=[...cm.entries()].sort((a,b)=>b[1].count-a[1].count);
-  rb.innerHTML=rs.length?rs.map(([r,v])=>{const cc=v.ciclo||'',cl=cc==='AM'?'am':cc==='PM'?'pm':'';return`<tr><td class="rname">${esc(r)}</td><td>${cl?`<span class="cb ${cl}">${cc}</span>`:'—'}</td><td><span class="cnt">${v.count}</span></td></tr>`;}).join(''):'<tr class="empty"><td colspan="3">Sem dados</td></tr>';
-  const sb=el('h-sb');
-  sb.innerHTML=entries.length?entries.map(e=>{
-    const t=new Date(e.ts).toLocaleTimeString('pt-BR');
-    const s=e.found?'color:var(--green);font-weight:700':'color:var(--red);font-weight:700';
-    const cl=(e.rc||'').toLowerCase();
-    return`<tr><td style="font-family:monospace;font-size:.77rem">${t}</td><td style="font-family:monospace;font-size:.77rem">${esc(e.id)}</td><td style="${s}">${esc(e.rota)}</td><td>${cl?`<span class="cb ${cl}">${e.rc}</span>`:'—'}</td><td style="font-size:.8rem;color:var(--muted)">${GNAMES[e._g]||e._g}</td></tr>`;
-  }).join(''):'<tr class="empty"><td colspan="5">Sem dados</td></tr>';
 }
-function clearHistDate(){
+
+async function clearHistDate(){
   const date=el('hDate').value;if(!date){alert('Selecione uma data.');return;}
   if(!confirm(`Apagar todos os dados de ${date}?`))return;
-  const d=loadStore();delete d[date];localStorage.setItem(STORE,JSON.stringify(d));searchHist();
+  await db.ref(`goleiro_smg15/bipagens/${date}`).remove();
+  searchHist();
 }
+
 function dlHist(){
+  if(!lastHistEntries.length){alert('Faça uma busca antes de baixar.');return;}
   const date=el('hDate').value,c=el('hCiclo').value,gf=el('hGoleiro').value;
-  const d=loadStore(),dd=d[date]||{};
-  let entries=[];
-  const ciclos=c==='todos'?CICLOS:[c],goleiros=gf==='todos'?GS:[gf];
-  for(const cc of ciclos)for(const gg of goleiros){const list=(dd[cc]&&dd[cc][gg])||[];entries.push(...list.map(e=>({...e,_c:cc,_g:gg})));}
-  entries.sort((a,b)=>b.ts.localeCompare(a.ts));
-  if(!entries.length){alert('Sem dados.');return;}
   const hdr='Horário,PACOTES_ID,ROTA OT,Ciclo,Goleiro,Status';
-  const rows=entries.map(e=>[e.ts,e.id,e.rota,e.rc||'—',GNAMES[e._g]||e._g,e.found?'Com Rota':'Sem Rota'].join(','));
+  const rows=lastHistEntries.map(e=>[e.ts,e.id,e.rota,e.rc||'—',GNAMES[e._g]||e._g,e.found?'Com Rota':'Sem Rota'].join(','));
   triggerDL('﻿'+hdr+'\n'+rows.join('\n'),`goleiro_hist_${date}_${c}_${gf}.csv`);
 }
 
