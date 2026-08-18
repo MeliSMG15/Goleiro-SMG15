@@ -20,12 +20,12 @@
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 
 /* Header */
-header{background:#0f172a;height:58px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.hlogo{display:flex;align-items:center;gap:11px}
-.hlogo-icon{width:34px;height:34px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.15rem}
-.hlogo h1{font-size:1rem;font-weight:700;color:#f8fafc;line-height:1.2}
-.hlogo small{font-size:.7rem;color:#475569}
-.spill{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:999px;font-size:.73rem;font-weight:600;border:1px solid}
+header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hlogo{display:flex;align-items:center;gap:10px}
+.hlogo-icon{width:32px;height:32px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.hlogo h1{font-size:.97rem;font-weight:700;color:#f8fafc;line-height:1.2}
+.hlogo small{font-size:.68rem;color:#475569}
+.spill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:.72rem;font-weight:600;border:1px solid}
 .spill.loading{background:rgba(234,179,8,.1);color:#eab308;border-color:rgba(234,179,8,.3)}
 .spill.ready{background:rgba(5,150,105,.12);color:#34d399;border-color:rgba(5,150,105,.3)}
 .spill.error{background:rgba(239,68,68,.1);color:#f87171;border-color:rgba(239,68,68,.3)}
@@ -33,78 +33,104 @@ header{background:#0f172a;height:58px;padding:0 28px;display:flex;align-items:ce
 .sdot.pulse{animation:pulse 1.3s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 
-/* Tab nav */
-.tab-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:0;box-shadow:var(--sh)}
-.tab-btn{padding:13px 22px;font-size:.88rem;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:8px;transition:color .15s;white-space:nowrap}
+/* Main tab nav */
+.tab-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;box-shadow:var(--sh)}
+.tab-btn{padding:12px 20px;font-size:.87rem;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:7px;transition:color .15s;white-space:nowrap}
 .tab-btn:hover{color:var(--text)}
 .tab-btn.am.active{color:var(--am);border-bottom-color:var(--am)}
 .tab-btn.pm.active{color:var(--pm);border-bottom-color:var(--pm)}
 .tab-btn.hist.active{color:var(--text);border-bottom-color:#334155}
-.tab-chip{padding:1px 8px;border-radius:999px;font-size:.67rem;font-weight:700}
+.tab-chip{padding:1px 8px;border-radius:999px;font-size:.66rem;font-weight:700}
 .tab-btn.am .tab-chip{background:var(--am-bg);color:var(--am-dk)}
 .tab-btn.pm .tab-chip{background:var(--pm-bg);color:var(--pm-dk)}
 
 /* Panes */
-.tab-pane{display:none;flex:1;flex-direction:column}
+.tab-pane{display:none;flex:1;overflow:hidden}
 .tab-pane.active{display:flex}
 
-/* Scan layout */
-.scan-wrap{max-width:1200px;margin:0 auto;width:100%;padding:22px 24px;display:flex;flex-direction:column;gap:18px}
+/* Scan outer: sidebar + main */
+.scan-outer{display:flex;flex:1;overflow:hidden;min-height:0}
+
+/* Goleiro sidebar */
+.gsidebar{width:164px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.gside-hdr{padding:14px 14px 6px;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.9px;color:var(--subtle)}
+.gbtn{width:100%;padding:11px 14px;display:flex;align-items:center;gap:9px;border:none;background:none;cursor:pointer;border-left:3px solid transparent;text-align:left;transition:all .15s;position:relative}
+.gbtn:hover{background:var(--bg)}
+.gbtn.am.active{background:#eff6ff;border-left-color:var(--am)}
+.gbtn.pm.active{background:#f5f3ff;border-left-color:var(--pm)}
+.gnum{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0;background:#f1f5f9;color:var(--muted);transition:all .15s}
+.gbtn.am.active .gnum{background:var(--am-bg);color:var(--am-dk)}
+.gbtn.pm.active .gnum{background:var(--pm-bg);color:var(--pm-dk)}
+.gtext{min-width:0;flex:1}
+.gname{font-size:.8rem;font-weight:600;color:var(--text);line-height:1.2}
+.gbtn.am.active .gname{color:var(--am-dk)}
+.gbtn.pm.active .gname{color:var(--pm-dk)}
+.gcnt{font-size:.67rem;color:var(--subtle);margin-top:2px;font-variant-numeric:tabular-nums}
+.gdivider{height:1px;background:var(--border);margin:4px 0}
+
+/* Scan main */
+.scan-main{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+
+/* Active goleiro label in controls */
+.glabel{display:flex;align-items:center;gap:6px;padding:0 14px;height:50px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--surface);font-size:.82rem;font-weight:600;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.glabel-dot{width:8px;height:8px;border-radius:50%}
+.glabel-dot.am{background:var(--am)}
+.glabel-dot.pm{background:var(--pm)}
 
 /* Result card */
-.result-card{background:var(--surface);border:2px solid var(--border);border-radius:16px;min-height:175px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:28px;text-align:center;transition:all .22s;box-shadow:var(--sh)}
+.result-card{background:var(--surface);border:2px solid var(--border);border-radius:16px;min-height:165px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:24px;text-align:center;transition:all .22s;box-shadow:var(--sh)}
 .result-card.found{background:#f0fdf9;border-color:var(--green);box-shadow:0 0 0 4px rgba(5,150,105,.07),var(--sh-md)}
 .result-card.sem-rota{background:var(--red-bg);border-color:var(--red);box-shadow:0 0 0 4px rgba(220,38,38,.07),var(--sh-md)}
-.result-tag{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--subtle)}
+.result-tag{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--subtle)}
 .result-card.found .result-tag{color:var(--green)}
 .result-card.sem-rota .result-tag{color:var(--red)}
-.result-route{font-size:4.8rem;font-weight:900;line-height:1;letter-spacing:-2px;color:var(--text)}
+.result-route{font-size:4.5rem;font-weight:900;line-height:1;letter-spacing:-2px;color:var(--text)}
 .result-card.found .result-route{color:var(--green)}
 .result-card.sem-rota .result-route{color:var(--red)}
 .result-meta{display:flex;align-items:center;gap:8px;margin-top:2px}
-.result-id{font-family:monospace;font-size:.85rem;color:var(--muted);background:var(--bg);padding:3px 10px;border-radius:6px}
-.idle-icon{font-size:2.8rem;opacity:.18}
-.idle-txt{font-size:1.1rem;color:var(--subtle)}
+.result-id{font-family:monospace;font-size:.82rem;color:var(--muted);background:var(--bg);padding:3px 10px;border-radius:6px}
+.idle-icon{font-size:2.6rem;opacity:.18}
+.idle-txt{font-size:1.05rem;color:var(--subtle)}
 
 /* ciclo badge */
-.cb{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.73rem;font-weight:700}
+.cb{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.71rem;font-weight:700}
 .cb.am{background:var(--am-bg);color:var(--am-dk)}
 .cb.pm{background:var(--pm-bg);color:var(--pm-dk)}
 
 /* Controls */
-.controls{display:flex;gap:10px;flex-wrap:wrap}
-.field-wrap{flex:1;min-width:240px;position:relative}
-.field-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--subtle);font-size:1rem;pointer-events:none}
-.scan-input{width:100%;height:50px;padding:0 14px 0 42px;font-size:1.05rem;font-family:monospace;background:var(--surface);border:2px solid var(--border);border-radius:var(--r);color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
+.controls{display:flex;gap:9px;flex-wrap:wrap}
+.field-wrap{flex:1;min-width:220px;position:relative}
+.field-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--subtle);font-size:.95rem;pointer-events:none}
+.scan-input{width:100%;height:50px;padding:0 14px 0 40px;font-size:1.05rem;font-family:monospace;background:var(--surface);border:2px solid var(--border);border-radius:var(--r);color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
 .scan-input.am:focus{border-color:var(--am);box-shadow:0 0 0 3px rgba(2,132,199,.12)}
 .scan-input.pm:focus{border-color:var(--pm);box-shadow:0 0 0 3px rgba(124,58,237,.12)}
-.btn{height:50px;padding:0 18px;border-radius:var(--r);font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);transition:all .16s;white-space:nowrap}
+.btn{height:50px;padding:0 16px;border-radius:var(--r);font-size:.83rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);transition:all .16s;white-space:nowrap}
 .btn:hover{border-color:#94a3b8;color:var(--text);background:var(--bg)}
 .btn.dl{background:var(--green);border-color:var(--green);color:#fff}
 .btn.dl:hover{background:#047857;border-color:#047857}
 
 /* Stats */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.scard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px 18px;box-shadow:var(--sh);display:flex;align-items:center;gap:13px}
-.sico{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;box-shadow:var(--sh);display:flex;align-items:center;gap:11px}
+.sico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
 .sico.bl{background:#dbeafe}.sico.gr{background:var(--green-bg)}.sico.rd{background:var(--red-bg)}.sico.sl{background:#f1f5f9}
-.sval{font-size:1.9rem;font-weight:800;line-height:1}
+.sval{font-size:1.8rem;font-weight:800;line-height:1}
 .sval.bl{color:#2563eb}.sval.gr{color:var(--green)}.sval.rd{color:var(--red)}.sval.sl{color:var(--muted)}
-.slbl{font-size:.67rem;color:var(--subtle);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+.slbl{font-size:.65rem;color:var(--subtle);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
 
 /* Bottom grid */
-.bgrid{display:grid;grid-template-columns:300px 1fr;gap:16px}
+.bgrid{display:grid;grid-template-columns:280px 1fr;gap:14px}
 
 /* Panel */
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;display:flex;flex-direction:column}
-.phead{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fafbfc}
-.ptitle{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
-.pbody{flex:1;overflow-y:auto;max-height:300px}
-.pbody-hist{flex:1;overflow-y:auto;max-height:420px}
+.phead{padding:11px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fafbfc}
+.ptitle{font-size:.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.pbody{flex:1;overflow-y:auto;max-height:290px}
+.pbody-hist{flex:1;overflow-y:auto;max-height:400px}
 
 /* Filter tabs */
 .ftabs{display:flex;gap:3px}
-.ftab{padding:3px 10px;border-radius:999px;font-size:.71rem;font-weight:600;cursor:pointer;border:1px solid transparent;color:var(--muted);background:none;transition:all .13s}
+.ftab{padding:3px 9px;border-radius:999px;font-size:.69rem;font-weight:600;cursor:pointer;border:1px solid transparent;color:var(--muted);background:none;transition:all .13s}
 .ftab:hover{background:var(--bg)}
 .ftab.active.all{background:#f1f5f9;color:#334155;border-color:#cbd5e1}
 .ftab.active.am{background:var(--am-bg);color:var(--am-dk);border-color:var(--am-bd)}
@@ -112,52 +138,53 @@ header{background:#0f172a;height:58px;padding:0 28px;display:flex;align-items:ce
 
 /* Tables */
 .tbl{width:100%;border-collapse:collapse}
-.tbl th{text-align:left;padding:8px 14px;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);background:#f8fafc;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1}
+.tbl th{text-align:left;padding:7px 14px;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);background:#f8fafc;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1}
 .tbl th:last-child,.tbl td:last-child{text-align:right}
-.tbl td{padding:8px 14px;font-size:.84rem;border-bottom:1px solid #f8fafc;color:var(--text)}
+.tbl td{padding:7px 14px;font-size:.83rem;border-bottom:1px solid #f8fafc;color:var(--text)}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tbody tr:hover td{background:#fafbfc}
-.tbl .empty td{text-align:center;color:var(--subtle);padding:28px}
-.rname{font-weight:700;font-family:monospace;font-size:.88rem}
-.cnt{display:inline-block;padding:2px 10px;border-radius:999px;font-weight:700;font-size:.78rem;background:var(--green-bg);color:#047857}
+.tbl .empty td{text-align:center;color:var(--subtle);padding:24px}
+.rname{font-weight:700;font-family:monospace;font-size:.86rem}
+.cnt{display:inline-block;padding:2px 9px;border-radius:999px;font-weight:700;font-size:.77rem;background:var(--green-bg);color:#047857}
 
-/* History rows — visível de longe */
-.hrow{display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:2px solid rgba(0,0,0,.05);transition:filter .1s}
+/* History rows */
+.hrow{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:2px solid rgba(0,0,0,.04);transition:filter .1s}
 .hrow:last-child{border-bottom:none}
 .hrow:hover{filter:brightness(.97)}
 .hrow.found{background:#ecfdf5}
 .hrow.sem-rota{background:#fff1f2}
-.hrow-stripe{width:5px;align-self:stretch;border-radius:3px;flex-shrink:0;min-height:52px}
+.hrow-stripe{width:4px;align-self:stretch;border-radius:3px;flex-shrink:0;min-height:48px}
 .hrow.found .hrow-stripe{background:var(--green)}
 .hrow.sem-rota .hrow-stripe{background:var(--red)}
 .hrow-body{flex:1;min-width:0}
-.hrow-rota{font-size:1.45rem;font-weight:900;line-height:1.1;letter-spacing:-.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hrow-rota{font-size:1.4rem;font-weight:900;line-height:1.1;letter-spacing:-.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hrow.found .hrow-rota{color:#047857}
 .hrow.sem-rota .hrow-rota{color:#b91c1c}
-.hrow-id{font-family:monospace;font-size:.78rem;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hrow-time{font-size:.72rem;color:var(--subtle);white-space:nowrap;font-family:monospace;align-self:flex-start;padding-top:2px}
-.empty-st{text-align:center;padding:32px 16px;color:var(--subtle);font-size:.88rem}
-.empty-st span{font-size:2rem;display:block;margin-bottom:6px;opacity:.3}
-
-.infobar{font-size:.7rem;color:var(--subtle);text-align:center;padding-bottom:4px}
+.hrow-id{font-family:monospace;font-size:.76rem;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hrow-time{font-size:.7rem;color:var(--subtle);white-space:nowrap;font-family:monospace;align-self:flex-start;padding-top:2px}
+.empty-st{text-align:center;padding:28px 14px;color:var(--subtle);font-size:.86rem}
+.empty-st span{font-size:1.8rem;display:block;margin-bottom:6px;opacity:.3}
+.infobar{font-size:.68rem;color:var(--subtle);text-align:center;padding-bottom:2px}
 
 /* Histórico tab */
-.hist-wrap{max-width:1100px;margin:0 auto;width:100%;padding:22px 24px;display:flex;flex-direction:column;gap:18px}
-.hctrl{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;box-shadow:var(--sh);display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.hist-outer{flex:1;overflow-y:auto}
+.hist-wrap{max-width:1100px;margin:0 auto;width:100%;padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.hctrl{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;box-shadow:var(--sh);display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
 .fgrp{display:flex;flex-direction:column;gap:4px}
-.flbl{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
-.finp{height:40px;padding:0 11px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:.88rem;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s}
+.flbl{font-size:.66rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.finp{height:38px;padding:0 10px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:.86rem;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s}
 .finp:focus{border-color:#3b82f6}
-.ibtn{height:40px;padding:0 16px;border-radius:var(--r-sm);font-size:.82rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;border:1.5px solid;transition:all .15s;white-space:nowrap}
+.ibtn{height:38px;padding:0 15px;border-radius:var(--r-sm);font-size:.8rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;border:1.5px solid;transition:all .15s;white-space:nowrap}
 .ibtn.pri{background:#2563eb;border-color:#2563eb;color:#fff}.ibtn.pri:hover{background:#1d4ed8}
 .ibtn.out{background:var(--surface);border-color:var(--border);color:var(--muted)}.ibtn.out:hover{border-color:#94a3b8;color:var(--text)}
 .ibtn.danger{background:var(--surface);border-color:#fca5a5;color:var(--red)}.ibtn.danger:hover{background:var(--red-bg)}
 .ml-auto{margin-left:auto}
-.hsumm{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.hdgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hsumm{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.hdgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
-@media(max-width:900px){.bgrid,.hdgrid{grid-template-columns:1fr}}
-@media(max-width:640px){.stats,.hsumm{grid-template-columns:repeat(2,1fr)}.result-route{font-size:3rem}}
+@media(max-width:960px){.bgrid,.hdgrid{grid-template-columns:1fr}}
+@media(max-width:700px){.gsidebar{width:56px}.gname,.gcnt{display:none}.gnum{font-size:.8rem}}
+@media(max-width:600px){.stats,.hsumm{grid-template-columns:repeat(2,1fr)}.result-route{font-size:3rem}}
 </style>
 </head>
 <body>
@@ -177,150 +204,140 @@ header{background:#0f172a;height:58px;padding:0 28px;display:flex;align-items:ce
 </header>
 
 <div class="tab-nav">
-  <button class="tab-btn am active" onclick="switchTab('am')">
-    🌅 <span>Ciclo AM</span>
-    <span id="amChip" class="tab-chip">0</span>
-  </button>
-  <button class="tab-btn pm" onclick="switchTab('pm')">
-    🌆 <span>Ciclo PM</span>
-    <span id="pmChip" class="tab-chip">0</span>
-  </button>
-  <button class="tab-btn hist" onclick="switchTab('hist')">
-    📊 <span>Histórico</span>
-  </button>
+  <button class="tab-btn am active" onclick="switchTab('am')">🌅 Ciclo AM <span id="amChip" class="tab-chip">0</span></button>
+  <button class="tab-btn pm" onclick="switchTab('pm')">🌆 Ciclo PM <span id="pmChip" class="tab-chip">0</span></button>
+  <button class="tab-btn hist" onclick="switchTab('hist')">📊 Histórico</button>
 </div>
 
-<!-- AM -->
+<!-- ─── AM ─── -->
 <div id="tab-am" class="tab-pane active">
-  <div class="scan-wrap">
-    <div id="card-am" class="result-card">
-      <div class="idle-icon">📦</div><div class="idle-txt">Aguardando bipagem AM...</div>
-    </div>
-    <div class="controls">
-      <div class="field-wrap"><span class="field-ico">📷</span>
-        <input id="inp-am" class="scan-input am" type="text" placeholder="Bipe o pacote AM (Enter)..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+  <div class="scan-outer">
+    <div class="gsidebar" id="gsidebar-am"></div>
+    <div class="scan-main" id="smain-am">
+      <div id="card-am" class="result-card">
+        <div class="idle-icon">📦</div><div class="idle-txt">Aguardando bipagem AM...</div>
       </div>
-      <button class="btn" onclick="loadSheet()">↺ Atualizar base</button>
-      <button class="btn dl" onclick="downloadCSV('AM')">↓ Baixar AM</button>
-    </div>
-    <div class="stats">
-      <div class="scard"><div class="sico bl">📦</div><div><div id="am-total" class="sval bl">0</div><div class="slbl">Bipados</div></div></div>
-      <div class="scard"><div class="sico gr">✅</div><div><div id="am-found" class="sval gr">0</div><div class="slbl">Com Rota</div></div></div>
-      <div class="scard"><div class="sico rd">❌</div><div><div id="am-nr" class="sval rd">0</div><div class="slbl">Sem Rota</div></div></div>
-      <div class="scard"><div class="sico sl">🗄️</div><div><div id="am-base" class="sval sl">0</div><div class="slbl">Na Base</div></div></div>
-    </div>
-    <div class="bgrid">
-      <div class="panel">
-        <div class="phead">
-          <span class="ptitle">📊 Por Rota OT</span>
-          <div class="ftabs">
-            <button class="ftab active all" data-s="AM" data-f="todos" onclick="setFilter(this)">Todos</button>
-            <button class="ftab am" data-s="AM" data-f="am" onclick="setFilter(this)">AM</button>
-            <button class="ftab pm" data-s="AM" data-f="pm" onclick="setFilter(this)">PM</button>
+      <div class="controls">
+        <div class="field-wrap"><span class="field-ico">📷</span>
+          <input id="inp-am" class="scan-input am" type="text" placeholder="Bipe o pacote AM (Enter)..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+        </div>
+        <div class="glabel"><div class="glabel-dot am"></div><span id="am-glabel">Goleiro 1</span></div>
+        <button class="btn" onclick="loadSheet()">↺ Base</button>
+        <button class="btn dl" onclick="downloadCSV('AM')">↓ Baixar</button>
+      </div>
+      <div class="stats">
+        <div class="scard"><div class="sico bl">📦</div><div><div id="am-total" class="sval bl">0</div><div class="slbl">Bipados</div></div></div>
+        <div class="scard"><div class="sico gr">✅</div><div><div id="am-found" class="sval gr">0</div><div class="slbl">Com Rota</div></div></div>
+        <div class="scard"><div class="sico rd">❌</div><div><div id="am-nr" class="sval rd">0</div><div class="slbl">Sem Rota</div></div></div>
+        <div class="scard"><div class="sico sl">🗄️</div><div><div id="am-base" class="sval sl">0</div><div class="slbl">Na Base</div></div></div>
+      </div>
+      <div class="bgrid">
+        <div class="panel">
+          <div class="phead">
+            <span class="ptitle">📊 Por Rota OT</span>
+            <div class="ftabs">
+              <button class="ftab active all" data-s="AM" data-f="todos" onclick="setFilter(this)">Todos</button>
+              <button class="ftab am" data-s="AM" data-f="am" onclick="setFilter(this)">AM</button>
+              <button class="ftab pm" data-s="AM" data-f="pm" onclick="setFilter(this)">PM</button>
+            </div>
           </div>
+          <div class="pbody"><table class="tbl"><thead><tr><th>Rota OT</th><th>Ciclo</th><th>Qtd</th></tr></thead><tbody id="rb-am"><tr class="empty"><td colspan="3">Nenhum pacote</td></tr></tbody></table></div>
         </div>
-        <div class="pbody">
-          <table class="tbl"><thead><tr><th>Rota OT</th><th>Ciclo</th><th>Qtd</th></tr></thead>
-          <tbody id="rb-am"><tr class="empty"><td colspan="3">Nenhum pacote bipado</td></tr></tbody></table>
+        <div class="panel">
+          <div class="phead">
+            <span class="ptitle">📋 Histórico — <span id="am-hist-title">Goleiro 1</span></span>
+            <button class="ibtn danger" onclick="clearSess('AM')">🗑️ Limpar</button>
+          </div>
+          <div id="hl-am" class="pbody-hist"><div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div></div>
         </div>
       </div>
-      <div class="panel">
-        <div class="phead">
-          <span class="ptitle">📋 Histórico do dia</span>
-          <button class="ibtn danger" onclick="clearSess('AM')">🗑️ Limpar</button>
-        </div>
-        <div id="hl-am" class="pbody-hist"><div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div></div>
-      </div>
+      <div id="inf-am" class="infobar">—</div>
     </div>
-    <div id="inf-am" class="infobar">—</div>
   </div>
 </div>
 
-<!-- PM -->
+<!-- ─── PM ─── -->
 <div id="tab-pm" class="tab-pane">
-  <div class="scan-wrap">
-    <div id="card-pm" class="result-card">
-      <div class="idle-icon">📦</div><div class="idle-txt">Aguardando bipagem PM...</div>
-    </div>
-    <div class="controls">
-      <div class="field-wrap"><span class="field-ico">📷</span>
-        <input id="inp-pm" class="scan-input pm" type="text" placeholder="Bipe o pacote PM (Enter)..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+  <div class="scan-outer">
+    <div class="gsidebar" id="gsidebar-pm"></div>
+    <div class="scan-main" id="smain-pm">
+      <div id="card-pm" class="result-card">
+        <div class="idle-icon">📦</div><div class="idle-txt">Aguardando bipagem PM...</div>
       </div>
-      <button class="btn" onclick="loadSheet()">↺ Atualizar base</button>
-      <button class="btn dl" onclick="downloadCSV('PM')">↓ Baixar PM</button>
-    </div>
-    <div class="stats">
-      <div class="scard"><div class="sico bl">📦</div><div><div id="pm-total" class="sval bl">0</div><div class="slbl">Bipados</div></div></div>
-      <div class="scard"><div class="sico gr">✅</div><div><div id="pm-found" class="sval gr">0</div><div class="slbl">Com Rota</div></div></div>
-      <div class="scard"><div class="sico rd">❌</div><div><div id="pm-nr" class="sval rd">0</div><div class="slbl">Sem Rota</div></div></div>
-      <div class="scard"><div class="sico sl">🗄️</div><div><div id="pm-base" class="sval sl">0</div><div class="slbl">Na Base</div></div></div>
-    </div>
-    <div class="bgrid">
-      <div class="panel">
-        <div class="phead">
-          <span class="ptitle">📊 Por Rota OT</span>
-          <div class="ftabs">
-            <button class="ftab active all" data-s="PM" data-f="todos" onclick="setFilter(this)">Todos</button>
-            <button class="ftab am" data-s="PM" data-f="am" onclick="setFilter(this)">AM</button>
-            <button class="ftab pm" data-s="PM" data-f="pm" onclick="setFilter(this)">PM</button>
+      <div class="controls">
+        <div class="field-wrap"><span class="field-ico">📷</span>
+          <input id="inp-pm" class="scan-input pm" type="text" placeholder="Bipe o pacote PM (Enter)..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+        </div>
+        <div class="glabel"><div class="glabel-dot pm"></div><span id="pm-glabel">Goleiro 1</span></div>
+        <button class="btn" onclick="loadSheet()">↺ Base</button>
+        <button class="btn dl" onclick="downloadCSV('PM')">↓ Baixar</button>
+      </div>
+      <div class="stats">
+        <div class="scard"><div class="sico bl">📦</div><div><div id="pm-total" class="sval bl">0</div><div class="slbl">Bipados</div></div></div>
+        <div class="scard"><div class="sico gr">✅</div><div><div id="pm-found" class="sval gr">0</div><div class="slbl">Com Rota</div></div></div>
+        <div class="scard"><div class="sico rd">❌</div><div><div id="pm-nr" class="sval rd">0</div><div class="slbl">Sem Rota</div></div></div>
+        <div class="scard"><div class="sico sl">🗄️</div><div><div id="pm-base" class="sval sl">0</div><div class="slbl">Na Base</div></div></div>
+      </div>
+      <div class="bgrid">
+        <div class="panel">
+          <div class="phead">
+            <span class="ptitle">📊 Por Rota OT</span>
+            <div class="ftabs">
+              <button class="ftab active all" data-s="PM" data-f="todos" onclick="setFilter(this)">Todos</button>
+              <button class="ftab am" data-s="PM" data-f="am" onclick="setFilter(this)">AM</button>
+              <button class="ftab pm" data-s="PM" data-f="pm" onclick="setFilter(this)">PM</button>
+            </div>
           </div>
+          <div class="pbody"><table class="tbl"><thead><tr><th>Rota OT</th><th>Ciclo</th><th>Qtd</th></tr></thead><tbody id="rb-pm"><tr class="empty"><td colspan="3">Nenhum pacote</td></tr></tbody></table></div>
         </div>
-        <div class="pbody">
-          <table class="tbl"><thead><tr><th>Rota OT</th><th>Ciclo</th><th>Qtd</th></tr></thead>
-          <tbody id="rb-pm"><tr class="empty"><td colspan="3">Nenhum pacote bipado</td></tr></tbody></table>
+        <div class="panel">
+          <div class="phead">
+            <span class="ptitle">📋 Histórico — <span id="pm-hist-title">Goleiro 1</span></span>
+            <button class="ibtn danger" onclick="clearSess('PM')">🗑️ Limpar</button>
+          </div>
+          <div id="hl-pm" class="pbody-hist"><div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div></div>
         </div>
       </div>
-      <div class="panel">
-        <div class="phead">
-          <span class="ptitle">📋 Histórico do dia</span>
-          <button class="ibtn danger" onclick="clearSess('PM')">🗑️ Limpar</button>
-        </div>
-        <div id="hl-pm" class="pbody-hist"><div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div></div>
-      </div>
+      <div id="inf-pm" class="infobar">—</div>
     </div>
-    <div id="inf-pm" class="infobar">—</div>
   </div>
 </div>
 
-<!-- HISTÓRICO -->
+<!-- ─── HISTÓRICO ─── -->
 <div id="tab-hist" class="tab-pane">
-  <div class="hist-wrap">
-    <div class="hctrl">
-      <div class="fgrp">
-        <label class="flbl">Data</label>
-        <input type="date" id="hDate" class="finp" style="width:155px"/>
-      </div>
-      <div class="fgrp">
-        <label class="flbl">Ciclo</label>
-        <select id="hCiclo" class="finp" style="width:115px">
-          <option value="todos">Todos</option>
-          <option value="AM">AM</option>
-          <option value="PM">PM</option>
-        </select>
-      </div>
-      <button class="ibtn pri" onclick="searchHist()">🔍 Buscar</button>
-      <button class="ibtn out" onclick="dlHist()">↓ Baixar</button>
-      <button class="ibtn danger ml-auto" onclick="clearHistDate()">🗑️ Limpar dia</button>
-    </div>
-    <div class="hsumm">
-      <div class="scard"><div class="sico bl">📦</div><div><div id="h-total" class="sval bl">—</div><div class="slbl">Total Bipados</div></div></div>
-      <div class="scard"><div class="sico gr">✅</div><div><div id="h-found" class="sval gr">—</div><div class="slbl">Com Rota</div></div></div>
-      <div class="scard"><div class="sico rd">❌</div><div><div id="h-nr" class="sval rd">—</div><div class="slbl">Sem Rota</div></div></div>
-      <div class="scard"><div class="sico sl">🗓️</div><div><div id="h-date" class="sval sl" style="font-size:1rem;line-height:1.3">—</div><div class="slbl">Data consultada</div></div></div>
-    </div>
-    <div class="hdgrid">
-      <div class="panel">
-        <div class="phead"><span class="ptitle">📊 Rotas no período</span></div>
-        <div class="pbody">
-          <table class="tbl"><thead><tr><th>Rota OT</th><th>Ciclo</th><th>Qtd</th></tr></thead>
-          <tbody id="h-rb"><tr class="empty"><td colspan="3">Faça uma busca acima</td></tr></tbody></table>
+  <div class="hist-outer">
+    <div class="hist-wrap">
+      <div class="hctrl">
+        <div class="fgrp"><label class="flbl">Data</label><input type="date" id="hDate" class="finp" style="width:148px"/></div>
+        <div class="fgrp"><label class="flbl">Ciclo</label>
+          <select id="hCiclo" class="finp" style="width:105px"><option value="todos">Todos</option><option value="AM">AM</option><option value="PM">PM</option></select>
         </div>
+        <div class="fgrp"><label class="flbl">Goleiro</label>
+          <select id="hGoleiro" class="finp" style="width:120px">
+            <option value="todos">Todos</option>
+            <option value="G1">Goleiro 1</option>
+            <option value="G2">Goleiro 2</option>
+            <option value="G3">Goleiro 3</option>
+            <option value="G4">Goleiro 4</option>
+          </select>
+        </div>
+        <button class="ibtn out" onclick="dlHist()">↓ Baixar</button>
+        <button class="ibtn danger ml-auto" onclick="clearHistDate()">🗑️ Limpar dia</button>
       </div>
-      <div class="panel">
-        <div class="phead"><span class="ptitle">📋 Bipagens do período</span></div>
-        <div class="pbody">
-          <table class="tbl"><thead><tr><th>Hora</th><th>ID</th><th>Rota OT</th><th>Ciclo Sessão</th></tr></thead>
-          <tbody id="h-sb"><tr class="empty"><td colspan="4">Faça uma busca acima</td></tr></tbody></table>
+      <div class="hsumm">
+        <div class="scard"><div class="sico bl">📦</div><div><div id="h-total" class="sval bl">—</div><div class="slbl">Total</div></div></div>
+        <div class="scard"><div class="sico gr">✅</div><div><div id="h-found" class="sval gr">—</div><div class="slbl">Com Rota</div></div></div>
+        <div class="scard"><div class="sico rd">❌</div><div><div id="h-nr" class="sval rd">—</div><div class="slbl">Sem Rota</div></div></div>
+        <div class="scard"><div class="sico sl">🗓️</div><div><div id="h-date" class="sval sl" style="font-size:.95rem;line-height:1.3">—</div><div class="slbl">Data</div></div></div>
+      </div>
+      <div class="hdgrid">
+        <div class="panel">
+          <div class="phead"><span class="ptitle">📊 Rotas no período</span></div>
+          <div class="pbody"><table class="tbl"><thead><tr><th>Rota OT</th><th>Ciclo</th><th>Qtd</th></tr></thead><tbody id="h-rb"><tr class="empty"><td colspan="3">Selecione os filtros acima</td></tr></tbody></table></div>
+        </div>
+        <div class="panel">
+          <div class="phead"><span class="ptitle">📋 Bipagens do período</span></div>
+          <div class="pbody"><table class="tbl"><thead><tr><th>Hora</th><th>ID</th><th>Rota OT</th><th>Ciclo</th><th>Goleiro</th></tr></thead><tbody id="h-sb"><tr class="empty"><td colspan="5">Selecione os filtros acima</td></tr></tbody></table></div>
         </div>
       </div>
     </div>
@@ -330,49 +347,51 @@ header{background:#0f172a;height:58px;padding:0 28px;display:flex;align-items:ce
 <script>
 const SHEET_ID='1hRVnx-G2Kw_ZoHYzCGyju914PrB2fGIKZgSHIjm8GxE',GID='1012863278';
 const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
-const STORE='goleiro_smg15_v2';
+const STORE='goleiro_smg15_v3';
+const CICLOS=['AM','PM'];
+const GS=['G1','G2','G3','G4'];
+const GNAMES={G1:'Goleiro 1',G2:'Goleiro 2',G3:'Goleiro 3',G4:'Goleiro 4'};
 
+// State
 let routeMap=new Map(),loaded=false,activeTab='am';
-const S={
-  AM:{stats:{total:0,found:0,nr:0},counts:new Map(),log:[],rf:'todos',timer:null},
-  PM:{stats:{total:0,found:0,nr:0},counts:new Map(),log:[],rf:'todos',timer:null}
-};
+const activeG={AM:'G1',PM:'G1'};
+const S={};
+for(const c of CICLOS){S[c]={};for(const g of GS)S[c][g]={stats:{total:0,found:0,nr:0},counts:new Map(),log:[],rf:'todos',timer:null};}
 
 // Audio
 const ac=new(window.AudioContext||window.webkitAudioContext)();
-function tone(f,d,t='sine',v=.25){
-  const o=ac.createOscillator(),g=ac.createGain();
-  o.connect(g);g.connect(ac.destination);
-  o.type=t;o.frequency.setValueAtTime(f,ac.currentTime);
-  g.gain.setValueAtTime(v,ac.currentTime);
-  g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);
-  o.start();o.stop(ac.currentTime+d);
-}
-function beepOk(){tone(880,.1);setTimeout(()=>tone(1100,.18),100)}
-function beepFail(){tone(260,.35,'sawtooth',.28)}
+function tone(f,d,t='sine',v=.25){const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type=t;o.frequency.setValueAtTime(f,ac.currentTime);g.gain.setValueAtTime(v,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.start();o.stop(ac.currentTime+d);}
+function beepOk(){tone(880,.1);setTimeout(()=>tone(1100,.18),100);}
+function beepFail(){tone(260,.35,'sawtooth',.28);}
 
 // CSV
-function parseCSV(txt){
-  const rows=[];
-  for(const raw of txt.split('\n')){
-    if(!raw.trim())continue;
-    const row=[];let cell='',inQ=false;
-    for(let i=0;i<raw.length;i++){
-      const c=raw[i];
-      if(c==='"'){if(inQ&&raw[i+1]==='"'){cell+='"';i++;}else inQ=!inQ;}
-      else if(c===','&&!inQ){row.push(cell.trim());cell='';}
-      else cell+=c;
-    }
-    row.push(cell.trim());rows.push(row);
+function parseCSV(txt){const rows=[];for(const raw of txt.split('\n')){if(!raw.trim())continue;const row=[];let cell='',inQ=false;for(let i=0;i<raw.length;i++){const c=raw[i];if(c==='"'){if(inQ&&raw[i+1]==='"'){cell+='"';i++;}else inQ=!inQ;}else if(c===','&&!inQ){row.push(cell.trim());cell='';}else cell+=c;}row.push(cell.trim());rows.push(row);}return rows;}
+function cicloOf(r){if(!r)return'';const u=r.toUpperCase();if(u.includes('_AM')||/^AM\d/i.test(r))return'AM';if(u.includes('_PM')||/^PM\d/i.test(r))return'PM';return'';}
+
+// Build sidebars
+function buildSidebars(){
+  for(const c of CICLOS){
+    const sb=el('gsidebar-'+c.toLowerCase());
+    sb.innerHTML=`<div class="gside-hdr">Goleiros</div>`+GS.map((g,i)=>`
+      ${i>0?'<div class="gdivider"></div>':''}
+      <button class="gbtn ${c.toLowerCase()}${g===activeG[c]?' active':''}" data-ciclo="${c}" data-g="${g}" onclick="setGoleiro(this)">
+        <div class="gnum">${i+1}</div>
+        <div class="gtext"><div class="gname">${GNAMES[g]}</div><div class="gcnt" id="${c}-${g}-cnt">0 bipados</div></div>
+      </button>`).join('');
   }
-  return rows;
 }
 
-function cicloOf(r){
-  if(!r)return'';const u=r.toUpperCase();
-  if(u.includes('_AM')||/^AM\d/i.test(r))return'AM';
-  if(u.includes('_PM')||/^PM\d/i.test(r))return'PM';
-  return'';
+// Set goleiro
+function setGoleiro(btn){
+  const c=btn.dataset.ciclo,g=btn.dataset.g;
+  activeG[c]=g;
+  document.querySelectorAll(`.gbtn[data-ciclo="${c}"]`).forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  el(`${c.toLowerCase()}-glabel`).textContent=GNAMES[g];
+  el(`${c.toLowerCase()}-hist-title`).textContent=GNAMES[g];
+  resetCard(c);
+  refreshDisplay(c);
+  focusActive();
 }
 
 // Load sheet
@@ -384,26 +403,17 @@ async function loadSheet(){
     const rows=parseCSV(await res.text());
     if(rows.length<2)throw new Error('Aba sem dados');
     const h=rows[0];
-    const iI=h.findIndex(x=>x==='PACOTES_ID');
-    const iR=h.findIndex(x=>x==='ROTA OT');
+    const iI=h.findIndex(x=>x==='PACOTES_ID'),iR=h.findIndex(x=>x==='ROTA OT');
     if(iI<0)throw new Error('Coluna PACOTES_ID não encontrada');
     if(iR<0)throw new Error('Coluna ROTA OT não encontrada');
     routeMap.clear();
-    for(let i=1;i<rows.length;i++){
-      const r=rows[i],id=r[iI]?.trim();
-      if(!id||id==='0')continue;
-      const rot=r[iR]?.trim()||'';
-      routeMap.set(id,{rotaOT:rot,ciclo:cicloOf(rot)});
-    }
+    for(let i=1;i<rows.length;i++){const r=rows[i],id=r[iI]?.trim();if(!id||id==='0')continue;const rot=r[iR]?.trim()||'';routeMap.set(id,{rotaOT:rot,ciclo:cicloOf(rot)});}
     loaded=true;
     const t=new Date().toLocaleTimeString('pt-BR');
     setSpill('ready',`Pronto — ${routeMap.size} registros`);
     el('am-base').textContent=el('pm-base').textContent=routeMap.size;
     el('inf-am').textContent=el('inf-pm').textContent=`Base carregada às ${t} · ${routeMap.size} pacotes · atualiza a cada 5 min`;
-  }catch(e){
-    loaded=false;setSpill('error','Erro ao carregar');
-    el('inf-am').textContent=`Falha: ${e.message}`;
-  }
+  }catch(e){loaded=false;setSpill('error','Erro');el('inf-am').textContent=`Falha: ${e.message}`;}
   focusActive();
 }
 
@@ -422,118 +432,117 @@ function switchTab(n){
 function scan(raw,ciclo){
   const id=raw.trim();if(!id)return;
   if(!loaded){alert('Aguarde — base carregando.');return;}
-  const s=S[ciclo];
-  if(s.timer){clearTimeout(s.timer);s.timer=null;}
-  s.stats.total++;
-  el(`${ciclo.toLowerCase()}-total`).textContent=s.stats.total;
-  el(`${ciclo.toLowerCase()}Chip`).textContent=s.stats.total;
+  const g=activeG[ciclo],sess=S[ciclo][g];
+  if(sess.timer){clearTimeout(sess.timer);sess.timer=null;}
+  sess.stats.total++;
+  updateStatsDisplay(ciclo);
+  updateSidebarChips(ciclo);
   const entry=routeMap.get(id);
   if(entry){
-    const{rotaOT,ciclo:rc}=entry;
-    const lbl=rotaOT||'SEM ROTA',found=!!rotaOT;
+    const{rotaOT,ciclo:rc}=entry,lbl=rotaOT||'SEM ROTA',found=!!rotaOT;
     showCard(ciclo,id,lbl,rc,found);
-    logScan(ciclo,id,lbl,rc,found);
-    if(found){
-      s.stats.found++;el(`${ciclo.toLowerCase()}-found`).textContent=s.stats.found;
-      const p=s.counts.get(rotaOT)||{count:0,ciclo:rc};
-      s.counts.set(rotaOT,{count:p.count+1,ciclo:rc});
-      renderCounts(ciclo);beepOk();
-    }else{
-      s.stats.nr++;el(`${ciclo.toLowerCase()}-nr`).textContent=s.stats.nr;beepFail();
-    }
+    logScan(ciclo,g,id,lbl,rc,found);
+    if(found){sess.stats.found++;const p=sess.counts.get(rotaOT)||{count:0,ciclo:rc};sess.counts.set(rotaOT,{count:p.count+1,ciclo:rc});renderCounts(ciclo);beepOk();}
+    else{sess.stats.nr++;beepFail();}
   }else{
     showCard(ciclo,id,'SEM ROTA','',false);
-    logScan(ciclo,id,'SEM ROTA','',false);
-    s.stats.nr++;el(`${ciclo.toLowerCase()}-nr`).textContent=s.stats.nr;beepFail();
+    logScan(ciclo,g,id,'SEM ROTA','',false);
+    sess.stats.nr++;beepFail();
   }
-  s.timer=setTimeout(()=>resetCard(ciclo),5000);
+  updateStatsDisplay(ciclo);
+  // Update main tab chip (sum all goleiros)
+  const total=GS.reduce((s,gg)=>s+S[ciclo][gg].stats.total,0);
+  el(`${ciclo.toLowerCase()}Chip`).textContent=total;
+  sess.timer=setTimeout(()=>resetCard(ciclo),5000);
 }
 
+function updateStatsDisplay(c){
+  const g=activeG[c],sess=S[c][g],p=c.toLowerCase();
+  el(`${p}-total`).textContent=sess.stats.total;
+  el(`${p}-found`).textContent=sess.stats.found;
+  el(`${p}-nr`).textContent=sess.stats.nr;
+}
+
+function updateSidebarChips(c){
+  for(const g of GS){
+    const cnt=el(`${c}-${g}-cnt`);
+    if(cnt)cnt.textContent=S[c][g].stats.total+' bipados';
+  }
+}
+
+function refreshDisplay(c){
+  updateStatsDisplay(c);
+  renderCounts(c);
+  renderHist(c);
+}
+
+// Card
 function showCard(ciclo,id,rota,rc,found){
   const card=el('card-'+ciclo.toLowerCase());
   const cls=found?'found':'sem-rota',lbl=found?'✅ Rota Identificada':'❌ Sem Rota Definida';
-  const rcL=rc?.toLowerCase();
   card.className='result-card '+cls;
-  card.innerHTML=`
-    <div class="result-tag">${lbl}</div>
-    <div class="result-route">${esc(rota)}</div>
-    <div class="result-meta">${rc?`<span class="cb ${rcL}">${rc}</span>`:''}<div class="result-id">ID: ${esc(id)}</div></div>`;
+  card.innerHTML=`<div class="result-tag">${lbl}</div><div class="result-route">${esc(rota)}</div><div class="result-meta">${rc?`<span class="cb ${rc.toLowerCase()}">${rc}</span>`:''}<div class="result-id">ID: ${esc(id)}</div></div>`;
 }
-function resetCard(c){
-  const card=el('card-'+c.toLowerCase());
-  card.className='result-card';
-  card.innerHTML=`<div class="idle-icon">📦</div><div class="idle-txt">Aguardando bipagem ${c}...</div>`;
-}
+function resetCard(c){const card=el('card-'+c.toLowerCase());card.className='result-card';card.innerHTML=`<div class="idle-icon">📦</div><div class="idle-txt">Aguardando bipagem ${c}...</div>`;}
 
 // Route counts
 function setFilter(btn){
   const s=btn.dataset.s,f=btn.dataset.f;
-  S[s].rf=f;
+  S[s][activeG[s]].rf=f;
   btn.closest('.ftabs').querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderCounts(s);
 }
 function renderCounts(c){
-  const s=S[c],body=el('rb-'+c.toLowerCase());
-  const entries=[...s.counts.entries()]
-    .filter(([,v])=>s.rf==='todos'||v.ciclo.toLowerCase()===s.rf)
-    .sort((a,b)=>b[1].count-a[1].count);
-  if(!entries.length){body.innerHTML='<tr class="empty"><td colspan="3">Nenhum pacote bipado</td></tr>';return;}
-  body.innerHTML=entries.map(([r,v])=>{
-    const cc=v.ciclo||'',cl=cc==='AM'?'am':cc==='PM'?'pm':'';
-    return`<tr><td class="rname">${esc(r)}</td><td>${cl?`<span class="cb ${cl}">${cc}</span>`:'—'}</td><td><span class="cnt">${v.count}</span></td></tr>`;
-  }).join('');
+  const g=activeG[c],sess=S[c][g],body=el('rb-'+c.toLowerCase());
+  const entries=[...sess.counts.entries()].filter(([,v])=>sess.rf==='todos'||v.ciclo.toLowerCase()===sess.rf).sort((a,b)=>b[1].count-a[1].count);
+  if(!entries.length){body.innerHTML='<tr class="empty"><td colspan="3">Nenhum pacote</td></tr>';return;}
+  body.innerHTML=entries.map(([r,v])=>{const cc=v.ciclo||'',cl=cc==='AM'?'am':cc==='PM'?'pm':'';return`<tr><td class="rname">${esc(r)}</td><td>${cl?`<span class="cb ${cl}">${cc}</span>`:'—'}</td><td><span class="cnt">${v.count}</span></td></tr>`;}).join('');
 }
 
 // History
-function logScan(ciclo,id,rota,rc,found){
-  const e={id,rota,rc,found,time:new Date().toLocaleTimeString('pt-BR'),ts:new Date().toISOString()};
-  S[ciclo].log.unshift(e);
-  if(S[ciclo].log.length>500)S[ciclo].log.pop();
+function logScan(ciclo,g,id,rota,rc,found){
+  const e={id,rota,rc,found,g,time:new Date().toLocaleTimeString('pt-BR'),ts:new Date().toISOString()};
+  S[ciclo][g].log.unshift(e);
+  if(S[ciclo][g].log.length>500)S[ciclo][g].log.pop();
   renderHist(ciclo);
-  saveStore(ciclo,e);
+  saveStore(ciclo,g,e);
 }
 function renderHist(c){
-  const el2=el('hl-'+c.toLowerCase()),log=S[c].log;
+  const g=activeG[c],el2=el('hl-'+c.toLowerCase()),log=S[c][g].log;
   if(!log.length){el2.innerHTML='<div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div>';return;}
   el2.innerHTML=log.map(h=>`
     <div class="hrow ${h.found?'found':'sem-rota'}">
       <div class="hrow-stripe"></div>
-      <div class="hrow-body">
-        <div class="hrow-rota">${esc(h.rota)}</div>
-        <div class="hrow-id">${esc(h.id)}</div>
-      </div>
+      <div class="hrow-body"><div class="hrow-rota">${esc(h.rota)}</div><div class="hrow-id">${esc(h.id)}</div></div>
       <span class="hrow-time">${h.time}</span>
     </div>`).join('');
 }
 function clearSess(c){
-  if(!confirm(`Limpar sessão ${c}?`))return;
-  S[c].log=[];S[c].counts.clear();S[c].stats={total:0,found:0,nr:0};
-  const p=c.toLowerCase();
-  ['total','found','nr'].forEach(k=>el(`${p}-${k}`).textContent='0');
-  el(`${c.toLowerCase()}Chip`).textContent='0';
-  renderHist(c);renderCounts(c);resetCard(c);
+  const g=activeG[c];
+  if(!confirm(`Limpar ${GNAMES[g]} — ${c}?`))return;
+  S[c][g].log=[];S[c][g].counts.clear();S[c][g].stats={total:0,found:0,nr:0};
+  updateStatsDisplay(c);updateSidebarChips(c);renderHist(c);renderCounts(c);resetCard(c);
 }
 
 // Download session
 function downloadCSV(c){
-  const log=S[c].log;if(!log.length){alert('Sem dados.');return;}
-  const hdr='Horário,PACOTES_ID,ROTA OT,Ciclo Rota,Status';
+  const g=activeG[c],log=S[c][g].log;
+  if(!log.length){alert('Sem dados.');return;}
+  const hdr='Horário,PACOTES_ID,ROTA OT,Ciclo,Status';
   const rows=log.map(e=>[e.ts,e.id,e.rota,e.rc||'—',e.found?'Com Rota':'Sem Rota'].join(','));
-  triggerDL('﻿'+hdr+'\n'+rows.join('\n'),`goleiro_${c}_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`);
+  triggerDL('﻿'+hdr+'\n'+rows.join('\n'),`goleiro_${c}_${g}_${new Date().toISOString().slice(0,10)}.csv`);
 }
 
 // LocalStorage
 function loadStore(){try{return JSON.parse(localStorage.getItem(STORE)||'{}');}catch{return{};}}
-function saveStore(c,e){
+function saveStore(c,g,e){
   try{
     const d=loadStore(),date=e.ts.slice(0,10);
-    if(!d[date])d[date]={AM:[],PM:[]};
-    if(!d[date][c])d[date][c]=[];
-    d[date][c].unshift(e);
-    if(d[date][c].length>2000)d[date][c].pop();
-    const keys=Object.keys(d).sort();
-    while(keys.length>60)delete d[keys.shift()];
+    if(!d[date])d[date]={};if(!d[date][c])d[date][c]={};if(!d[date][c][g])d[date][c][g]=[];
+    d[date][c][g].unshift(e);
+    if(d[date][c][g].length>2000)d[date][c][g].pop();
+    const keys=Object.keys(d).sort();while(keys.length>60)delete d[keys.shift()];
     localStorage.setItem(STORE,JSON.stringify(d));
   }catch(err){console.warn('storage:',err);}
 }
@@ -541,83 +550,72 @@ function saveStore(c,e){
 // Histórico
 function today(){return new Date().toISOString().slice(0,10);}
 function searchHist(){
-  const date=el('hDate').value,c=el('hCiclo').value;
-  if(!date){alert('Selecione uma data.');return;}
-  const d=loadStore(),dd=d[date]||{AM:[],PM:[]};
+  const date=el('hDate').value,c=el('hCiclo').value,gf=el('hGoleiro').value;
+  if(!date)return;
+  const d=loadStore(),dd=d[date]||{};
   let entries=[];
-  if(c==='todos'){
-    entries=[...(dd.AM||[]).map(e=>({...e,_s:'AM'})),...(dd.PM||[]).map(e=>({...e,_s:'PM'}))].sort((a,b)=>b.ts.localeCompare(a.ts));
-  }else{
-    entries=(dd[c]||[]).map(e=>({...e,_s:c}));
+  const ciclos=c==='todos'?CICLOS:[c];
+  const goleiros=gf==='todos'?GS:[gf];
+  for(const cc of ciclos)for(const gg of goleiros){
+    const list=(dd[cc]&&dd[cc][gg])||[];
+    entries.push(...list.map(e=>({...e,_c:cc,_g:gg})));
   }
+  entries.sort((a,b)=>b.ts.localeCompare(a.ts));
   const tot=entries.length,fnd=entries.filter(e=>e.found).length;
-  el('h-total').textContent=tot;el('h-found').textContent=fnd;
-  el('h-nr').textContent=tot-fnd;el('h-date').textContent=date;
-  // Route counts
+  el('h-total').textContent=tot;el('h-found').textContent=fnd;el('h-nr').textContent=tot-fnd;el('h-date').textContent=date;
   const cm=new Map();
   entries.filter(e=>e.found).forEach(e=>{const p=cm.get(e.rota)||{count:0,ciclo:e.rc||''};cm.set(e.rota,{count:p.count+1,ciclo:e.rc||''});});
   const rb=el('h-rb');
   const rs=[...cm.entries()].sort((a,b)=>b[1].count-a[1].count);
   rb.innerHTML=rs.length?rs.map(([r,v])=>{const cc=v.ciclo||'',cl=cc==='AM'?'am':cc==='PM'?'pm':'';return`<tr><td class="rname">${esc(r)}</td><td>${cl?`<span class="cb ${cl}">${cc}</span>`:'—'}</td><td><span class="cnt">${v.count}</span></td></tr>`;}).join(''):'<tr class="empty"><td colspan="3">Sem dados</td></tr>';
-  // Scan list
   const sb=el('h-sb');
   sb.innerHTML=entries.length?entries.map(e=>{
     const t=new Date(e.ts).toLocaleTimeString('pt-BR');
     const s=e.found?'color:var(--green);font-weight:700':'color:var(--red);font-weight:700';
-    const cl=e._s==='AM'?'am':'pm';
-    return`<tr><td style="font-family:monospace;font-size:.78rem">${t}</td><td style="font-family:monospace;font-size:.78rem">${esc(e.id)}</td><td style="${s}">${esc(e.rota)}</td><td><span class="cb ${cl}">${e._s}</span></td></tr>`;
-  }).join(''):'<tr class="empty"><td colspan="4">Sem dados</td></tr>';
+    const cl=(e.rc||'').toLowerCase();
+    return`<tr><td style="font-family:monospace;font-size:.77rem">${t}</td><td style="font-family:monospace;font-size:.77rem">${esc(e.id)}</td><td style="${s}">${esc(e.rota)}</td><td>${cl?`<span class="cb ${cl}">${e.rc}</span>`:'—'}</td><td style="font-size:.8rem;color:var(--muted)">${GNAMES[e._g]||e._g}</td></tr>`;
+  }).join(''):'<tr class="empty"><td colspan="5">Sem dados</td></tr>';
 }
 function clearHistDate(){
-  const date=el('hDate').value;
-  if(!date){alert('Selecione uma data.');return;}
+  const date=el('hDate').value;if(!date){alert('Selecione uma data.');return;}
   if(!confirm(`Apagar todos os dados de ${date}?`))return;
-  const d=loadStore();delete d[date];
-  localStorage.setItem(STORE,JSON.stringify(d));searchHist();
+  const d=loadStore();delete d[date];localStorage.setItem(STORE,JSON.stringify(d));searchHist();
 }
 function dlHist(){
-  const date=el('hDate').value,c=el('hCiclo').value;
-  const d=loadStore(),dd=d[date]||{AM:[],PM:[]};
+  const date=el('hDate').value,c=el('hCiclo').value,gf=el('hGoleiro').value;
+  const d=loadStore(),dd=d[date]||{};
   let entries=[];
-  if(c==='todos'){entries=[...(dd.AM||[]).map(e=>({...e,_s:'AM'})),...(dd.PM||[]).map(e=>({...e,_s:'PM'}))].sort((a,b)=>b.ts.localeCompare(a.ts));}
-  else{entries=(dd[c]||[]).map(e=>({...e,_s:c}));}
-  if(!entries.length){alert('Sem dados para baixar.');return;}
-  const hdr='Horário,PACOTES_ID,ROTA OT,Ciclo Rota,Ciclo Sessão,Status';
-  const rows=entries.map(e=>[e.ts,e.id,e.rota,e.rc||'—',e._s,e.found?'Com Rota':'Sem Rota'].join(','));
-  triggerDL('﻿'+hdr+'\n'+rows.join('\n'),`goleiro_hist_${date}_${c}.csv`);
+  const ciclos=c==='todos'?CICLOS:[c],goleiros=gf==='todos'?GS:[gf];
+  for(const cc of ciclos)for(const gg of goleiros){const list=(dd[cc]&&dd[cc][gg])||[];entries.push(...list.map(e=>({...e,_c:cc,_g:gg})));}
+  entries.sort((a,b)=>b.ts.localeCompare(a.ts));
+  if(!entries.length){alert('Sem dados.');return;}
+  const hdr='Horário,PACOTES_ID,ROTA OT,Ciclo,Goleiro,Status';
+  const rows=entries.map(e=>[e.ts,e.id,e.rota,e.rc||'—',GNAMES[e._g]||e._g,e.found?'Com Rota':'Sem Rota'].join(','));
+  triggerDL('﻿'+hdr+'\n'+rows.join('\n'),`goleiro_hist_${date}_${c}_${gf}.csv`);
 }
 
-function triggerDL(content,name){
-  const blob=new Blob([content],{type:'text/csv;charset=utf-8;'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);
-}
+function triggerDL(content,name){const blob=new Blob([content],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
 
 // Helpers
 const el=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-function setSpill(t,txt){
-  const p=el('spill');p.className='spill '+t;
-  p.querySelector('.sdot').className='sdot'+(t==='loading'?' pulse':'');
-  el('spillTxt').textContent=txt;
-}
-function focusActive(){
-  const i=el(activeTab==='am'?'inp-am':activeTab==='pm'?'inp-pm':null);
-  if(i){i.focus();i.select();}
-}
+function setSpill(t,txt){const p=el('spill');p.className='spill '+t;p.querySelector('.sdot').className='sdot'+(t==='loading'?' pulse':'');el('spillTxt').textContent=txt;}
+function focusActive(){const i=el(activeTab==='am'?'inp-am':activeTab==='pm'?'inp-pm':null);if(i){i.focus();i.select();}}
 
 // Events
 el('inp-am').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=e.target.value;e.target.value='';scan(v,'AM');});
 el('inp-pm').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=e.target.value;e.target.value='';scan(v,'PM');});
-document.addEventListener('click',e=>{
-  if(!e.target.closest('input,button,select'))focusActive();
-});
+document.addEventListener('click',e=>{if(!e.target.closest('input,button,select,.gbtn'))focusActive();});
 el('hDate').addEventListener('change',searchHist);
 el('hCiclo').addEventListener('change',searchHist);
+el('hGoleiro').addEventListener('change',searchHist);
 
 // Boot
 window.addEventListener('load',()=>{
+  buildSidebars();
   el('hDate').value=today();
-  focusActive();loadSheet();
+  focusActive();
+  loadSheet();
   setInterval(loadSheet,5*60*1000);
 });
 </script>
