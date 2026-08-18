@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goleiro — Segregação de Rotas</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    header h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+    .badge.loading { background: #0d2f1a; color: #3fb950; border: 1px solid #3fb950; }
+    .badge.ready   { background: #0d2f1a; color: #3fb950; border: 1px solid #3fb950; }
+    .badge.error   { background: #2d0d0d; color: #f85149; border: 1px solid #f85149; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .dot.pulse { animation: pulse 1.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    /* ── Main ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 20px;
+      gap: 20px;
+    }
+
+    /* ── Result card ── */
+    .result-card {
+      width: 100%;
+      max-width: 720px;
+      min-height: 210px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 32px;
+      border: 2px solid #30363d;
+      background: #161b22;
+      transition: background .25s, border-color .25s, box-shadow .25s;
+    }
+    .result-card.found {
+      background: #0d2f1a;
+      border-color: #3fb950;
+      box-shadow: 0 0 50px rgba(63,185,80,.18);
+    }
+    .result-card.sem-rota {
+      background: #2d0d0d;
+      border-color: #f85149;
+      box-shadow: 0 0 50px rgba(248,81,73,.18);
+    }
+    .result-label {
+      font-size: .85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6e7681;
+    }
+    .result-card.found    .result-label { color: #3fb950; }
+    .result-card.sem-rota .result-label { color: #f85149; }
+    .result-route {
+      font-size: 4.5rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      color: #c9d1d9;
+      word-break: break-all;
+      text-align: center;
+    }
+    .result-card.found    .result-route { color: #3fb950; }
+    .result-card.sem-rota .result-route { color: #f85149; }
+    .result-id {
+      font-family: monospace;
+      font-size: 1rem;
+      color: #8b949e;
+    }
+    .idle-icon { font-size: 3.5rem; opacity: .25; }
+    .idle-msg  { font-size: 1.4rem; color: #6e7681; }
+
+    /* ── Scan input ── */
+    .scan-row {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      gap: 10px;
+    }
+    .scan-wrap { flex: 1; position: relative; }
+    .scan-input {
+      width: 100%;
+      padding: 15px 18px 15px 48px;
+      font-size: 1.15rem;
+      font-family: monospace;
+      background: #161b22;
+      border: 2px solid #30363d;
+      border-radius: 12px;
+      color: #f0f6fc;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .scan-input:focus {
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88,166,255,.15);
+    }
+    .scan-ico {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.25rem;
+      color: #6e7681;
+      pointer-events: none;
+    }
+    .btn {
+      padding: 15px 18px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      color: #8b949e;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn:hover { background: #30363d; color: #f0f6fc; border-color: #58a6ff; }
+
+    /* ── Stats ── */
+    .stats-row {
+      width: 100%;
+      max-width: 720px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .stat {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .stat-n { font-size: 2rem; font-weight: 700; }
+    .stat-n.blue  { color: #58a6ff; }
+    .stat-n.green { color: #3fb950; }
+    .stat-n.red   { color: #f85149; }
+    .stat-l { font-size: .72rem; color: #8b949e; text-transform: uppercase; letter-spacing: .4px; margin-top: 2px; }
+
+    /* ── History ── */
+    .hist-section { width: 100%; max-width: 720px; }
+    .hist-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .hist-title { font-size: .82rem; font-weight: 600; color: #8b949e; text-transform: uppercase; letter-spacing: .5px; }
+    .btn-clear {
+      font-size: .8rem;
+      color: #6e7681;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all .2s;
+    }
+    .btn-clear:hover { background: #21262d; color: #f0f6fc; }
+    .hist-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .hist-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 14px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-left: 3px solid transparent;
+      border-radius: 8px;
+    }
+    .hist-item.found    { border-left-color: #3fb950; }
+    .hist-item.sem-rota { border-left-color: #f85149; }
+    .hist-id    { font-family: monospace; font-size: .9rem; color: #c9d1d9; flex: 1; }
+    .hist-rota  { font-weight: 600; font-size: .9rem; }
+    .hist-item.found    .hist-rota { color: #3fb950; }
+    .hist-item.sem-rota .hist-rota { color: #f85149; }
+    .hist-time  { font-size: .72rem; color: #6e7681; font-family: monospace; }
+    .hist-empty { text-align: center; padding: 20px; color: #6e7681; font-size: .9rem; }
+
+    .info-line { font-size: .78rem; color: #6e7681; text-align: center; }
+
+    /* ── Responsive ── */
+    @media (max-width: 520px) {
+      .result-route { font-size: 2.8rem; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>&#x1F945; Goleiro — Segregação de Rotas</h1>
+  <div id="badge" class="badge loading">
+    <div class="dot pulse"></div>
+    <span id="badgeText">Carregando base...</span>
+  </div>
+</header>
+
+<main>
+  <!-- Result -->
+  <div id="card" class="result-card">
+    <div class="idle-icon">&#x1F4E6;</div>
+    <div class="idle-msg">Aguardando bipagem...</div>
+  </div>
+
+  <!-- Input -->
+  <div class="scan-row">
+    <div class="scan-wrap">
+      <span class="scan-ico">&#x1F4F7;</span>
+      <input id="inp" class="scan-input" type="text"
+             placeholder="Bipe o pacote aqui (Enter para confirmar)..."
+             autocomplete="off" autocorrect="off" spellcheck="false" />
+    </div>
+    <button class="btn" onclick="loadSheet()">&#x21BB; Atualizar base</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat"><div id="sTotal"   class="stat-n blue">0</div><div class="stat-l">Bipados</div></div>
+    <div class="stat"><div id="sFound"   class="stat-n green">0</div><div class="stat-l">Com Rota</div></div>
+    <div class="stat"><div id="sNoRoute" class="stat-n red">0</div><div class="stat-l">Sem Rota</div></div>
+    <div class="stat"><div id="sBase"    class="stat-n blue">0</div><div class="stat-l">Na Base</div></div>
+  </div>
+
+  <!-- History -->
+  <div class="hist-section">
+    <div class="hist-head">
+      <span class="hist-title">&#x1F4CB; Histórico da sessão</span>
+      <button class="btn-clear" onclick="clearSession()">Limpar</button>
+    </div>
+    <div id="histList" class="hist-list">
+      <div class="hist-empty">Nenhuma bipagem ainda</div>
+    </div>
+  </div>
+
+  <div id="infoLine" class="info-line">—</div>
+</main>
+
+<script>
+  // ── Config ────────────────────────────────────────────────────────────────
+  const SHEET_ID  = '1hRVnx-G2Kw_ZoHYzCGyju914PrB2fGIKZgSHIjm8GxE';
+  const GID       = '1012863278';
+  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
+  const AUTO_REFRESH_MS = 5 * 60 * 1000; // 5 min
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let routeMap  = new Map();   // SHIPMENT_ID → rota
+  let loaded    = false;
+  let clearTimer = null;
+  let stats = { total: 0, found: 0, noRoute: 0 };
+  let sessionHistory = [];
+
+  // ── Audio (Web Audio API — no external files) ─────────────────────────────
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function tone(freq, dur, type = 'sine', vol = 0.28) {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + dur);
+  }
+
+  function beepOk()  { tone(800, .12); setTimeout(() => tone(1100, .18), 110); }
+  function beepFail(){ tone(280, .35, 'sawtooth'); }
+
+  // ── CSV parser ────────────────────────────────────────────────────────────
+  function parseCSV(text) {
+    const rows = [];
+    for (const raw of text.split('\n')) {
+      if (!raw.trim()) continue;
+      const row = [];
+      let cell = '', inQ = false;
+      for (let i = 0; i < raw.length; i++) {
+        const c = raw[i];
+        if (c === '"') {
+          if (inQ && raw[i + 1] === '"') { cell += '"'; i++; }
+          else inQ = !inQ;
+        } else if (c === ',' && !inQ) {
+          row.push(cell.trim()); cell = '';
+        } else {
+          cell += c;
+        }
+      }
+      row.push(cell.trim());
+      rows.push(row);
+    }
+    return rows;
+  }
+
+  // ── Load sheet ────────────────────────────────────────────────────────────
+  async function loadSheet() {
+    setBadge('loading', 'Carregando...');
+    try {
+      const res  = await fetch(SHEET_URL + '&_=' + Date.now());
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const rows = parseCSV(await res.text());
+      if (rows.length < 2) throw new Error('Aba sem dados');
+
+      const hdr  = rows[0];
+      const iShp = hdr.findIndex(h => h === 'SHIPMENT_ID');
+      const iRC  = hdr.findIndex(h => h === 'ROTA CERTA');
+      const iCC  = hdr.findIndex(h => h === 'Container_Certo');
+
+      if (iShp < 0) throw new Error('Coluna SHIPMENT_ID não encontrada');
+
+      routeMap.clear();
+      for (let i = 1; i < rows.length; i++) {
+        const r   = rows[i];
+        const id  = r[iShp]?.trim();
+        if (!id || id === '0') continue;
+        const rot = (iRC >= 0 ? r[iRC]?.trim() : '') || (iCC >= 0 ? r[iCC]?.trim() : '') || '';
+        routeMap.set(id, rot);
+      }
+
+      loaded = true;
+      const now = new Date().toLocaleTimeString('pt-BR');
+      setBadge('ready', `Pronto — ${routeMap.size} registros`);
+      el('sBase').textContent  = routeMap.size;
+      el('infoLine').textContent = `Base carregada às ${now} · ${routeMap.size} pacotes na aba goleiro`;
+    } catch (e) {
+      loaded = false;
+      setBadge('error', 'Erro ao carregar');
+      el('infoLine').textContent = `Falha: ${e.message}. Verifique se a planilha está pública e tente novamente.`;
+    }
+    focus();
+  }
+
+  // ── Scan handler ─────────────────────────────────────────────────────────
+  function scan(raw) {
+    const id = raw.trim();
+    if (!id) return;
+    if (!loaded) { alert('Aguarde — base ainda carregando.'); return; }
+
+    if (clearTimer) { clearTimeout(clearTimer); clearTimer = null; }
+
+    stats.total++;
+    el('sTotal').textContent = stats.total;
+
+    if (routeMap.has(id)) {
+      const rota = routeMap.get(id) || 'SEM ROTA';
+      showCard(id, rota, rota !== 'SEM ROTA');
+      addHistory(id, rota, rota !== 'SEM ROTA');
+      if (rota !== 'SEM ROTA') {
+        stats.found++;
+        el('sFound').textContent = stats.found;
+        beepOk();
+      } else {
+        stats.noRoute++;
+        el('sNoRoute').textContent = stats.noRoute;
+        beepFail();
+      }
+    } else {
+      showCard(id, 'SEM ROTA', false);
+      addHistory(id, 'SEM ROTA', false);
+      stats.noRoute++;
+      el('sNoRoute').textContent = stats.noRoute;
+      beepFail();
+    }
+
+    clearTimer = setTimeout(resetCard, 5000);
+  }
+
+  // ── Card ──────────────────────────────────────────────────────────────────
+  function showCard(id, rota, found) {
+    const cls   = found ? 'found' : 'sem-rota';
+    const label = found ? '✅ Rota Identificada' : '❌ Sem Rota Definida';
+    const card  = el('card');
+    card.className = `result-card ${cls}`;
+    card.innerHTML = `
+      <div class="result-label">${label}</div>
+      <div class="result-route">${esc(rota)}</div>
+      <div class="result-id">ID: ${esc(id)}</div>
+    `;
+  }
+
+  function resetCard() {
+    const card = el('card');
+    card.className = 'result-card';
+    card.innerHTML = `<div class="idle-icon">📦</div><div class="idle-msg">Aguardando bipagem...</div>`;
+  }
+
+  // ── History ───────────────────────────────────────────────────────────────
+  function addHistory(id, rota, found) {
+    sessionHistory.unshift({ id, rota, found, time: new Date().toLocaleTimeString('pt-BR') });
+    if (sessionHistory.length > 150) sessionHistory.pop();
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const list = el('histList');
+    if (!sessionHistory.length) {
+      list.innerHTML = '<div class="hist-empty">Nenhuma bipagem ainda</div>';
+      return;
+    }
+    list.innerHTML = sessionHistory.map(h => `
+      <div class="hist-item ${h.found ? 'found' : 'sem-rota'}">
+        <span class="hist-id">${esc(h.id)}</span>
+        <span class="hist-rota">${esc(h.rota)}</span>
+        <span class="hist-time">${h.time}</span>
+      </div>
+    `).join('');
+  }
+
+  function clearSession() {
+    sessionHistory = [];
+    stats = { total: 0, found: 0, noRoute: 0 };
+    el('sTotal').textContent   = '0';
+    el('sFound').textContent   = '0';
+    el('sNoRoute').textContent = '0';
+    renderHistory();
+    resetCard();
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function el(id) { return document.getElementById(id); }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;');
+  }
+
+  function setBadge(type, text) {
+    const b = el('badge');
+    b.className = `badge ${type}`;
+    b.querySelector('.dot').className = `dot${type === 'loading' ? ' pulse' : ''}`;
+    el('badgeText').textContent = text;
+  }
+
+  function focus() {
+    el('inp').focus();
+    el('inp').select();
+  }
+
+  // ── Events ────────────────────────────────────────────────────────────────
+  el('inp').addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const v = e.target.value;
+    e.target.value = '';
+    scan(v);
+  });
+
+  // Refocus whenever user clicks anywhere (keep scanner focused)
+  document.addEventListener('click', e => {
+    if (e.target !== el('inp')) focus();
+  });
+
+  // ── Boot ──────────────────────────────────────────────────────────────────
+  window.addEventListener('load', () => {
+    focus();
+    loadSheet();
+    setInterval(loadSheet, AUTO_REFRESH_MS);
+  });
+</script>
+
+</body>
+</html>
