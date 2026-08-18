@@ -609,9 +609,20 @@ const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'
 function setSpill(t,txt){const p=el('spill');p.className='spill '+t;p.querySelector('.sdot').className='sdot'+(t==='loading'?' pulse':'');el('spillTxt').textContent=txt;}
 function focusActive(){const i=el(activeTab==='am'?'inp-am':activeTab==='pm'?'inp-pm':null);if(i){i.focus();i.select();}}
 
+// Extrai o ID do QR (formato: ^id^Ç^47742356790^,^t^Ç^lm^...)
+// Se não for QR estruturado, retorna o valor bruto
+function parseBarcode(raw){
+  const m=raw.match(/\^id\^[^a-zA-Z0-9]*\^?([0-9]+)\^?/);
+  if(m)return m[1].trim();
+  // fallback: pega só os dígitos se tiver pelo menos 8 seguidos
+  const digits=raw.match(/\d{8,}/);
+  if(digits)return digits[0];
+  return raw.trim();
+}
+
 // Events
-el('inp-am').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=e.target.value;e.target.value='';scan(v,'AM');});
-el('inp-pm').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=e.target.value;e.target.value='';scan(v,'PM');});
+el('inp-am').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=parseBarcode(e.target.value);e.target.value='';scan(v,'AM');});
+el('inp-pm').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=parseBarcode(e.target.value);e.target.value='';scan(v,'PM');});
 document.addEventListener('click',e=>{if(!e.target.closest('input,button,select,.gbtn'))focusActive();});
 el('hDate').addEventListener('change',searchHist);
 el('hCiclo').addEventListener('change',searchHist);
