@@ -353,18 +353,17 @@
       if (rows.length < 2) throw new Error('Aba sem dados');
 
       const hdr  = rows[0];
-      const iShp = hdr.findIndex(h => h === 'SHIPMENT_ID');
-      const iRC  = hdr.findIndex(h => h === 'ROTA CERTA');
-      const iCC  = hdr.findIndex(h => h === 'Container_Certo');
+      const iShp  = hdr.findIndex(h => h === 'PACOTES_ID');
+      const iRota = hdr.findIndex(h => h === 'ROTA');
 
-      if (iShp < 0) throw new Error('Coluna SHIPMENT_ID não encontrada');
+      if (iShp < 0) throw new Error('Coluna PACOTES_ID não encontrada');
 
       routeMap.clear();
       for (let i = 1; i < rows.length; i++) {
-        const r   = rows[i];
-        const id  = r[iShp]?.trim();
+        const r  = rows[i];
+        const id = r[iShp]?.trim();
         if (!id || id === '0') continue;
-        const rot = (iRC >= 0 ? r[iRC]?.trim() : '') || (iCC >= 0 ? r[iCC]?.trim() : '') || '';
+        const rot = (iRota >= 0 ? r[iRota]?.trim() : '') || '';
         routeMap.set(id, rot);
       }
 
