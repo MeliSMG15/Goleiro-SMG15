@@ -93,13 +93,14 @@ header{background:#0f172a;height:58px;padding:0 28px;display:flex;align-items:ce
 .slbl{font-size:.67rem;color:var(--subtle);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
 
 /* Bottom grid */
-.bgrid{display:grid;grid-template-columns:1fr 1.5fr;gap:16px}
+.bgrid{display:grid;grid-template-columns:300px 1fr;gap:16px}
 
 /* Panel */
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;display:flex;flex-direction:column}
 .phead{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fafbfc}
 .ptitle{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
 .pbody{flex:1;overflow-y:auto;max-height:300px}
+.pbody-hist{flex:1;overflow-y:auto;max-height:420px}
 
 /* Filter tabs */
 .ftabs{display:flex;gap:3px}
@@ -120,16 +121,21 @@ header{background:#0f172a;height:58px;padding:0 28px;display:flex;align-items:ce
 .rname{font-weight:700;font-family:monospace;font-size:.88rem}
 .cnt{display:inline-block;padding:2px 10px;border-radius:999px;font-weight:700;font-size:.78rem;background:var(--green-bg);color:#047857}
 
-/* History rows */
-.hrow{display:flex;align-items:center;gap:9px;padding:8px 14px;border-bottom:1px solid #f8fafc;transition:background .1s}
-.hrow:hover{background:#f8fafc}
+/* History rows — visível de longe */
+.hrow{display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:2px solid rgba(0,0,0,.05);transition:filter .1s}
 .hrow:last-child{border-bottom:none}
-.hbar{width:3px;align-self:stretch;border-radius:999px;flex-shrink:0}
-.hbar.found{background:var(--green)}.hbar.sem-rota{background:var(--red)}
-.hid{font-family:monospace;font-size:.8rem;color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hrota{font-weight:700;font-size:.83rem;white-space:nowrap}
-.hrow.found .hrota{color:var(--green)}.hrow.sem-rota .hrota{color:var(--red)}
-.htime{font-size:.68rem;color:var(--subtle);white-space:nowrap;font-family:monospace}
+.hrow:hover{filter:brightness(.97)}
+.hrow.found{background:#ecfdf5}
+.hrow.sem-rota{background:#fff1f2}
+.hrow-stripe{width:5px;align-self:stretch;border-radius:3px;flex-shrink:0;min-height:52px}
+.hrow.found .hrow-stripe{background:var(--green)}
+.hrow.sem-rota .hrow-stripe{background:var(--red)}
+.hrow-body{flex:1;min-width:0}
+.hrow-rota{font-size:1.45rem;font-weight:900;line-height:1.1;letter-spacing:-.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hrow.found .hrow-rota{color:#047857}
+.hrow.sem-rota .hrow-rota{color:#b91c1c}
+.hrow-id{font-family:monospace;font-size:.78rem;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hrow-time{font-size:.72rem;color:var(--subtle);white-space:nowrap;font-family:monospace;align-self:flex-start;padding-top:2px}
 .empty-st{text-align:center;padding:32px 16px;color:var(--subtle);font-size:.88rem}
 .empty-st span{font-size:2rem;display:block;margin-bottom:6px;opacity:.3}
 
@@ -223,7 +229,7 @@ header{background:#0f172a;height:58px;padding:0 28px;display:flex;align-items:ce
           <span class="ptitle">📋 Histórico do dia</span>
           <button class="ibtn danger" onclick="clearSess('AM')">🗑️ Limpar</button>
         </div>
-        <div id="hl-am" class="pbody"><div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div></div>
+        <div id="hl-am" class="pbody-hist"><div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div></div>
       </div>
     </div>
     <div id="inf-am" class="infobar">—</div>
@@ -269,7 +275,7 @@ header{background:#0f172a;height:58px;padding:0 28px;display:flex;align-items:ce
           <span class="ptitle">📋 Histórico do dia</span>
           <button class="ibtn danger" onclick="clearSess('PM')">🗑️ Limpar</button>
         </div>
-        <div id="hl-pm" class="pbody"><div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div></div>
+        <div id="hl-pm" class="pbody-hist"><div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div></div>
       </div>
     </div>
     <div id="inf-pm" class="infobar">—</div>
@@ -492,10 +498,12 @@ function renderHist(c){
   if(!log.length){el2.innerHTML='<div class="empty-st"><span>📋</span>Nenhuma bipagem ainda</div>';return;}
   el2.innerHTML=log.map(h=>`
     <div class="hrow ${h.found?'found':'sem-rota'}">
-      <div class="hbar ${h.found?'found':'sem-rota'}"></div>
-      <span class="hid">${esc(h.id)}</span>
-      <span class="hrota">${esc(h.rota)}</span>
-      <span class="htime">${h.time}</span>
+      <div class="hrow-stripe"></div>
+      <div class="hrow-body">
+        <div class="hrow-rota">${esc(h.rota)}</div>
+        <div class="hrow-id">${esc(h.id)}</div>
+      </div>
+      <span class="hrow-time">${h.time}</span>
     </div>`).join('');
 }
 function clearSess(c){
