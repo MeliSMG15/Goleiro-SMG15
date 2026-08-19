@@ -52,13 +52,13 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
 .scan-outer{display:flex;flex:1;overflow:hidden;min-height:0}
 
 /* Goleiro sidebar */
-.gsidebar{width:164px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.gsidebar{width:180px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
 .gside-hdr{padding:14px 14px 6px;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.9px;color:var(--subtle)}
-.gbtn{width:100%;padding:11px 14px;display:flex;align-items:center;gap:9px;border:none;background:none;cursor:pointer;border-left:3px solid transparent;text-align:left;transition:all .15s;position:relative}
+.gbtn{width:100%;padding:11px 14px;display:flex;align-items:flex-start;gap:9px;border:none;background:none;cursor:pointer;border-left:3px solid transparent;text-align:left;transition:all .15s;position:relative}
 .gbtn:hover{background:var(--bg)}
 .gbtn.am.active{background:#eff6ff;border-left-color:var(--am)}
 .gbtn.pm.active{background:#f5f3ff;border-left-color:var(--pm)}
-.gnum{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0;background:#f1f5f9;color:var(--muted);transition:all .15s}
+.gnum{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0;background:#f1f5f9;color:var(--muted);transition:all .15s;margin-top:2px}
 .gbtn.am.active .gnum{background:var(--am-bg);color:var(--am-dk)}
 .gbtn.pm.active .gnum{background:var(--pm-bg);color:var(--pm-dk)}
 .gtext{min-width:0;flex:1}
@@ -66,10 +66,23 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
 .gbtn.am.active .gname{color:var(--am-dk)}
 .gbtn.pm.active .gname{color:var(--pm-dk)}
 .gcnt{font-size:.67rem;color:var(--subtle);margin-top:2px;font-variant-numeric:tabular-nums}
+.glast-id{font-size:.63rem;color:var(--muted);font-family:monospace;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px}
+.glast-rota{font-size:.72rem;font-weight:700;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.glast-rota.found{color:var(--green)}
+.glast-rota.nr{color:var(--red)}
 .gdivider{height:1px;background:var(--border);margin:4px 0}
 
 /* Scan main */
-.scan-main{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.scan-main{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+
+/* Category tabs */
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:2px 0}
+.cat-btn{padding:7px 14px;border-radius:999px;font-size:.77rem;font-weight:600;cursor:pointer;border:2px solid var(--border);background:var(--surface);color:var(--muted);transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.cat-btn:hover{border-color:#94a3b8;color:var(--text);background:var(--bg)}
+.cat-btn.active.am{border-color:var(--am);background:var(--am-bg);color:var(--am-dk)}
+.cat-btn.active.pm{border-color:var(--pm);background:var(--pm-bg);color:var(--pm-dk)}
+.cat-cnt{background:rgba(0,0,0,.08);border-radius:999px;padding:1px 7px;font-size:.69rem;font-weight:700;min-width:18px;text-align:center}
+.cat-badge{display:inline-block;padding:1px 7px;border-radius:4px;font-size:.63rem;font-weight:700;background:#e2e8f0;color:#475569;vertical-align:middle;margin-left:4px}
 
 /* Active goleiro label in controls */
 .glabel{display:flex;align-items:center;gap:6px;padding:0 14px;height:50px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--surface);font-size:.82rem;font-weight:600;color:var(--muted);white-space:nowrap;flex-shrink:0}
@@ -78,7 +91,7 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
 .glabel-dot.pm{background:var(--pm)}
 
 /* Result card */
-.result-card{background:var(--surface);border:2px solid var(--border);border-radius:16px;min-height:165px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:24px;text-align:center;transition:all .22s;box-shadow:var(--sh)}
+.result-card{background:var(--surface);border:2px solid var(--border);border-radius:16px;min-height:155px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:20px;text-align:center;transition:all .22s;box-shadow:var(--sh)}
 .result-card.found{background:#f0fdf9;border-color:var(--green);box-shadow:0 0 0 4px rgba(5,150,105,.07),var(--sh-md)}
 .result-card.sem-rota{background:var(--red-bg);border-color:var(--red);box-shadow:0 0 0 4px rgba(220,38,38,.07),var(--sh-md)}
 .result-tag{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--subtle)}
@@ -87,8 +100,9 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
 .result-route{font-size:4.5rem;font-weight:900;line-height:1;letter-spacing:-2px;color:var(--text)}
 .result-card.found .result-route{color:var(--green)}
 .result-card.sem-rota .result-route{color:var(--red)}
-.result-meta{display:flex;align-items:center;gap:8px;margin-top:2px}
+.result-meta{display:flex;align-items:center;gap:8px;margin-top:2px;flex-wrap:wrap;justify-content:center}
 .result-id{font-family:monospace;font-size:.82rem;color:var(--muted);background:var(--bg);padding:3px 10px;border-radius:6px}
+.result-cat{font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:6px;background:rgba(0,0,0,.07)}
 .idle-icon{font-size:2.6rem;opacity:.18}
 .idle-txt{font-size:1.05rem;color:var(--subtle)}
 
@@ -126,7 +140,7 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
 .phead{padding:11px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fafbfc}
 .ptitle{font-size:.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
 .pbody{flex:1;overflow-y:auto;max-height:290px}
-.pbody-hist{flex:1;overflow-y:auto;max-height:400px}
+.pbody-hist{flex:1;overflow-y:auto;max-height:420px}
 
 /* Filter tabs */
 .ftabs{display:flex;gap:3px}
@@ -183,7 +197,7 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
 .hdgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
 @media(max-width:960px){.bgrid,.hdgrid{grid-template-columns:1fr}}
-@media(max-width:700px){.gsidebar{width:56px}.gname,.gcnt{display:none}.gnum{font-size:.8rem}}
+@media(max-width:700px){.gsidebar{width:56px}.gname,.gcnt,.glast-id,.glast-rota{display:none}.gnum{font-size:.8rem}}
 @media(max-width:600px){.stats,.hsumm{grid-template-columns:repeat(2,1fr)}.result-route{font-size:3rem}}
 </style>
 </head>
@@ -221,6 +235,8 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
   <div class="scan-outer">
     <div class="gsidebar" id="gsidebar-am"></div>
     <div class="scan-main" id="smain-am">
+      <!-- Abas de categoria AM -->
+      <div class="cat-tabs" id="cattabs-am"></div>
       <div id="card-am" class="result-card">
         <div class="idle-icon">📦</div><div class="idle-txt">Aguardando bipagem AM...</div>
       </div>
@@ -268,6 +284,8 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
   <div class="scan-outer">
     <div class="gsidebar" id="gsidebar-pm"></div>
     <div class="scan-main" id="smain-pm">
+      <!-- Abas de categoria PM -->
+      <div class="cat-tabs" id="cattabs-pm"></div>
       <div id="card-pm" class="result-card">
         <div class="idle-icon">📦</div><div class="idle-txt">Aguardando bipagem PM...</div>
       </div>
@@ -328,6 +346,17 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
             <option value="G4">Goleiro 4</option>
           </select>
         </div>
+        <div class="fgrp"><label class="flbl">Categoria</label>
+          <select id="hCategoria" class="finp" style="width:140px">
+            <option value="todos">Todas</option>
+            <option value="Não Pescado">Não Pescado</option>
+            <option value="ND">ND</option>
+            <option value="ND 2">ND 2</option>
+            <option value="ND 3">ND 3</option>
+            <option value="Etiqueta Errada">Etiqueta Errada</option>
+            <option value="Promessa">Promessa</option>
+          </select>
+        </div>
         <button class="ibtn out" onclick="dlHist()">↓ Baixar</button>
         <button class="ibtn danger ml-auto" onclick="clearHistDate()">🗑️ Limpar dia</button>
       </div>
@@ -344,7 +373,7 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
         </div>
         <div class="panel">
           <div class="phead"><span class="ptitle">📋 Bipagens do período</span></div>
-          <div class="pbody"><table class="tbl"><thead><tr><th>Hora</th><th>ID</th><th>Rota OT</th><th>Ciclo</th><th>Goleiro</th></tr></thead><tbody id="h-sb"><tr class="empty"><td colspan="5">Selecione os filtros acima</td></tr></tbody></table></div>
+          <div class="pbody"><table class="tbl"><thead><tr><th>Hora</th><th>ID</th><th>Rota OT</th><th>Ciclo</th><th>Goleiro</th><th>Categoria</th></tr></thead><tbody id="h-sb"><tr class="empty"><td colspan="6">Selecione os filtros acima</td></tr></tbody></table></div>
         </div>
       </div>
     </div>
@@ -356,19 +385,33 @@ header{background:#0f172a;height:56px;padding:0 24px;display:flex;align-items:ce
 <script>
 const SHEET_ID='1hRVnx-G2Kw_ZoHYzCGyju914PrB2fGIKZgSHIjm8GxE',GID='1012863278';
 const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
-// Firebase config
 const FB_CFG={apiKey:"AIzaSyCR-O8PWfKdTANDPnu59DeACPmAN-TrJsI",authDomain:"registrosmg15.firebaseapp.com",databaseURL:"https://registrosmg15-default-rtdb.firebaseio.com",projectId:"registrosmg15",storageBucket:"registrosmg15.firebasestorage.app",messagingSenderId:"353674201769",appId:"1:353674201769:web:14f0e14647e85875b4b7b8"};
 firebase.initializeApp(FB_CFG);
 const db=firebase.database();
+
 const CICLOS=['AM','PM'];
 const GS=['G1','G2','G3','G4'];
 const GNAMES={G1:'Goleiro 1',G2:'Goleiro 2',G3:'Goleiro 3',G4:'Goleiro 4'};
+const CATS=['Não Pescado','ND','ND 2','ND 3','Etiqueta Errada','Promessa'];
 
 // State
 let routeMap=new Map(),loaded=false,activeTab='am';
 const activeG={AM:'G1',PM:'G1'};
 const S={};
-for(const c of CICLOS){S[c]={};for(const g of GS)S[c][g]={stats:{total:0,found:0,nr:0},counts:new Map(),log:[],rf:'todos',timer:null};}
+for(const c of CICLOS){
+  S[c]={};
+  for(const g of GS){
+    S[c][g]={
+      stats:{total:0,found:0,nr:0},
+      counts:new Map(),
+      catCounts:Object.fromEntries(CATS.map(k=>[k,0])),
+      log:[],rf:'todos',
+      cat:CATS[0],
+      timer:null,
+      lastId:'',lastRota:'',lastFound:null
+    };
+  }
+}
 
 // Audio
 const ac=new(window.AudioContext||window.webkitAudioContext)();
@@ -380,7 +423,7 @@ function beepFail(){tone(260,.35,'sawtooth',.28);}
 function parseCSV(txt){const rows=[];for(const raw of txt.split('\n')){if(!raw.trim())continue;const row=[];let cell='',inQ=false;for(let i=0;i<raw.length;i++){const c=raw[i];if(c==='"'){if(inQ&&raw[i+1]==='"'){cell+='"';i++;}else inQ=!inQ;}else if(c===','&&!inQ){row.push(cell.trim());cell='';}else cell+=c;}row.push(cell.trim());rows.push(row);}return rows;}
 function cicloOf(r){if(!r)return'';const u=r.toUpperCase();if(u.includes('_AM')||/^AM\d/i.test(r))return'AM';if(u.includes('_PM')||/^PM\d/i.test(r))return'PM';return'';}
 
-// Build sidebars
+// ─── Sidebars ───
 function buildSidebars(){
   for(const c of CICLOS){
     const sb=el('gsidebar-'+c.toLowerCase());
@@ -388,12 +431,31 @@ function buildSidebars(){
       ${i>0?'<div class="gdivider"></div>':''}
       <button class="gbtn ${c.toLowerCase()}${g===activeG[c]?' active':''}" data-ciclo="${c}" data-g="${g}" onclick="setGoleiro(this)">
         <div class="gnum">${i+1}</div>
-        <div class="gtext"><div class="gname">${GNAMES[g]}</div><div class="gcnt" id="${c}-${g}-cnt">0 bipados</div></div>
+        <div class="gtext">
+          <div class="gname">${GNAMES[g]}</div>
+          <div class="gcnt" id="${c}-${g}-cnt">0 bipados</div>
+          <div class="glast-rota" id="${c}-${g}-lrota"></div>
+          <div class="glast-id" id="${c}-${g}-lid"></div>
+        </div>
       </button>`).join('');
   }
 }
 
-// Set goleiro
+function updateSidebarChips(c){
+  for(const g of GS){
+    const cnt=el(`${c}-${g}-cnt`);
+    if(cnt)cnt.textContent=S[c][g].stats.total+' bipados';
+    const st=S[c][g];
+    const lrota=el(`${c}-${g}-lrota`);
+    const lid=el(`${c}-${g}-lid`);
+    if(lrota&&st.lastId){
+      lrota.className='glast-rota '+(st.lastFound?'found':'nr');
+      lrota.textContent=st.lastRota;
+      lid.textContent=st.lastId.slice(-8);
+    }
+  }
+}
+
 function setGoleiro(btn){
   const c=btn.dataset.ciclo,g=btn.dataset.g;
   activeG[c]=g;
@@ -403,10 +465,29 @@ function setGoleiro(btn){
   el(`${c.toLowerCase()}-hist-title`).textContent=GNAMES[g];
   resetCard(c);
   refreshDisplay(c);
+  buildCatTabs(c);
   focusActive();
 }
 
-// Load sheet
+// ─── Category tabs ───
+function buildCatTabs(c){
+  const d=el('cattabs-'+c.toLowerCase());
+  const g=activeG[c];
+  const cl=c.toLowerCase();
+  d.innerHTML=CATS.map(cat=>`
+    <button class="cat-btn${S[c][g].cat===cat?' active '+cl:''}" data-ciclo="${c}" data-cat="${cat}" onclick="setCat(this)">
+      ${esc(cat)}<span class="cat-cnt">${S[c][g].catCounts[cat]||0}</span>
+    </button>`).join('');
+}
+
+function setCat(btn){
+  const c=btn.dataset.ciclo,cat=btn.dataset.cat,g=activeG[c];
+  S[c][g].cat=cat;
+  buildCatTabs(c);
+  focusActive();
+}
+
+// ─── Load sheet ───
 async function loadSheet(){
   setSpill('loading','Carregando...');
   try{
@@ -429,7 +510,7 @@ async function loadSheet(){
   focusActive();
 }
 
-// Tab
+// ─── Tab ───
 function switchTab(n){
   activeTab=n;
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
@@ -440,29 +521,33 @@ function switchTab(n){
   if(n==='hist'&&!el('hDate').value){el('hDate').value=today();searchHist();}
 }
 
-// Scan
+// ─── Scan ───
 function scan(raw,ciclo){
   const id=raw.trim();if(!id)return;
   if(!loaded){alert('Aguarde — base carregando.');return;}
   const g=activeG[ciclo],sess=S[ciclo][g];
   if(sess.timer){clearTimeout(sess.timer);sess.timer=null;}
   sess.stats.total++;
+  const cat=sess.cat;
+  sess.catCounts[cat]=(sess.catCounts[cat]||0)+1;
   updateStatsDisplay(ciclo);
-  updateSidebarChips(ciclo);
   const entry=routeMap.get(id);
   if(entry){
     const{rotaOT,ciclo:rc}=entry,lbl=rotaOT||'SEM ROTA',found=!!rotaOT;
-    showCard(ciclo,id,lbl,rc,found);
-    logScan(ciclo,g,id,lbl,rc,found);
+    showCard(ciclo,id,lbl,rc,found,cat);
+    sess.lastId=id;sess.lastRota=lbl;sess.lastFound=found;
+    logScan(ciclo,g,id,lbl,rc,found,cat);
     if(found){sess.stats.found++;const p=sess.counts.get(rotaOT)||{count:0,ciclo:rc};sess.counts.set(rotaOT,{count:p.count+1,ciclo:rc});renderCounts(ciclo);beepOk();}
     else{sess.stats.nr++;beepFail();}
   }else{
-    showCard(ciclo,id,'SEM ROTA','',false);
-    logScan(ciclo,g,id,'SEM ROTA','',false);
+    showCard(ciclo,id,'SEM ROTA','',false,cat);
+    sess.lastId=id;sess.lastRota='SEM ROTA';sess.lastFound=false;
+    logScan(ciclo,g,id,'SEM ROTA','',false,cat);
     sess.stats.nr++;beepFail();
   }
   updateStatsDisplay(ciclo);
-  // Update main tab chip (sum all goleiros)
+  updateSidebarChips(ciclo);
+  buildCatTabs(ciclo);
   const total=GS.reduce((s,gg)=>s+S[ciclo][gg].stats.total,0);
   el(`${ciclo.toLowerCase()}Chip`).textContent=total;
   sess.timer=setTimeout(()=>resetCard(ciclo),5000);
@@ -475,29 +560,23 @@ function updateStatsDisplay(c){
   el(`${p}-nr`).textContent=sess.stats.nr;
 }
 
-function updateSidebarChips(c){
-  for(const g of GS){
-    const cnt=el(`${c}-${g}-cnt`);
-    if(cnt)cnt.textContent=S[c][g].stats.total+' bipados';
-  }
-}
-
 function refreshDisplay(c){
   updateStatsDisplay(c);
   renderCounts(c);
   renderHist(c);
+  updateSidebarChips(c);
 }
 
-// Card
-function showCard(ciclo,id,rota,rc,found){
+// ─── Card ───
+function showCard(ciclo,id,rota,rc,found,cat){
   const card=el('card-'+ciclo.toLowerCase());
   const cls=found?'found':'sem-rota',lbl=found?'✅ Rota Identificada':'❌ Sem Rota Definida';
   card.className='result-card '+cls;
-  card.innerHTML=`<div class="result-tag">${lbl}</div><div class="result-route">${esc(rota)}</div><div class="result-meta">${rc?`<span class="cb ${rc.toLowerCase()}">${rc}</span>`:''}<div class="result-id">ID: ${esc(id)}</div></div>`;
+  card.innerHTML=`<div class="result-tag">${lbl}</div><div class="result-route">${esc(rota)}</div><div class="result-meta">${rc?`<span class="cb ${rc.toLowerCase()}">${rc}</span>`:''}<div class="result-id">ID: ${esc(id)}</div><div class="result-cat">${esc(cat)}</div></div>`;
 }
 function resetCard(c){const card=el('card-'+c.toLowerCase());card.className='result-card';card.innerHTML=`<div class="idle-icon">📦</div><div class="idle-txt">Aguardando bipagem ${c}...</div>`;}
 
-// Route counts
+// ─── Route counts ───
 function setFilter(btn){
   const s=btn.dataset.s,f=btn.dataset.f;
   S[s][activeG[s]].rf=f;
@@ -512,9 +591,9 @@ function renderCounts(c){
   body.innerHTML=entries.map(([r,v])=>{const cc=v.ciclo||'',cl=cc==='AM'?'am':cc==='PM'?'pm':'';return`<tr><td class="rname">${esc(r)}</td><td>${cl?`<span class="cb ${cl}">${cc}</span>`:'—'}</td><td><span class="cnt">${v.count}</span></td></tr>`;}).join('');
 }
 
-// History
-function logScan(ciclo,g,id,rota,rc,found){
-  const e={id,rota,rc,found,g,time:new Date().toLocaleTimeString('pt-BR'),ts:new Date().toISOString()};
+// ─── History ───
+function logScan(ciclo,g,id,rota,rc,found,cat){
+  const e={id,rota,rc,found,g,cat,time:new Date().toLocaleTimeString('pt-BR'),ts:new Date().toISOString()};
   S[ciclo][g].log.unshift(e);
   if(S[ciclo][g].log.length>500)S[ciclo][g].log.pop();
   renderHist(ciclo);
@@ -526,7 +605,10 @@ function renderHist(c){
   el2.innerHTML=log.map(h=>`
     <div class="hrow ${h.found?'found':'sem-rota'}">
       <div class="hrow-stripe"></div>
-      <div class="hrow-body"><div class="hrow-rota">${esc(h.rota)}</div><div class="hrow-id">${esc(h.id)}</div></div>
+      <div class="hrow-body">
+        <div class="hrow-rota">${esc(h.rota)}</div>
+        <div class="hrow-id">${esc(h.id)}${h.cat?` <span class="cat-badge">${esc(h.cat)}</span>`:''}</div>
+      </div>
       <span class="hrow-time">${h.time}</span>
     </div>`).join('');
 }
@@ -534,35 +616,37 @@ function clearSess(c){
   const g=activeG[c];
   if(!confirm(`Limpar ${GNAMES[g]} — ${c}?`))return;
   S[c][g].log=[];S[c][g].counts.clear();S[c][g].stats={total:0,found:0,nr:0};
-  updateStatsDisplay(c);updateSidebarChips(c);renderHist(c);renderCounts(c);resetCard(c);
+  S[c][g].catCounts=Object.fromEntries(CATS.map(k=>[k,0]));
+  S[c][g].lastId='';S[c][g].lastRota='';S[c][g].lastFound=null;
+  updateStatsDisplay(c);updateSidebarChips(c);renderHist(c);renderCounts(c);resetCard(c);buildCatTabs(c);
 }
 
-// Download session
+// ─── Download session ───
 function downloadCSV(c){
   const g=activeG[c],log=S[c][g].log;
   if(!log.length){alert('Sem dados.');return;}
-  const hdr='Horário,PACOTES_ID,ROTA OT,Ciclo,Status';
-  const rows=log.map(e=>[e.ts,e.id,e.rota,e.rc||'—',e.found?'Com Rota':'Sem Rota'].join(','));
+  const hdr='Horário,PACOTES_ID,ROTA OT,Ciclo,Categoria,Status';
+  const rows=log.map(e=>[e.ts,e.id,e.rota,e.rc||'—',e.cat||'—',e.found?'Com Rota':'Sem Rota'].join(','));
   triggerDL('﻿'+hdr+'\n'+rows.join('\n'),`goleiro_${c}_${g}_${new Date().toISOString().slice(0,10)}.csv`);
 }
 
-// Firebase
+// ─── Firebase ───
 function saveToFirebase(c,g,e){
   const date=e.ts.slice(0,10);
   db.ref(`goleiro_smg15/bipagens/${date}/${c}/${g}`).push(e)
     .catch(err=>console.warn('Firebase write error:',err));
 }
 
-// Histórico
+// ─── Histórico ───
 function today(){return new Date().toISOString().slice(0,10);}
 let lastHistEntries=[];
 
 async function searchHist(){
-  const date=el('hDate').value,c=el('hCiclo').value,gf=el('hGoleiro').value;
+  const date=el('hDate').value,c=el('hCiclo').value,gf=el('hGoleiro').value,catf=el('hCategoria').value;
   if(!date)return;
   el('h-total').textContent='…';el('h-found').textContent='…';el('h-nr').textContent='…';
   el('h-rb').innerHTML='<tr class="empty"><td colspan="3">Carregando...</td></tr>';
-  el('h-sb').innerHTML='<tr class="empty"><td colspan="5">Carregando...</td></tr>';
+  el('h-sb').innerHTML='<tr class="empty"><td colspan="6">Carregando...</td></tr>';
   try{
     const ciclos=c==='todos'?CICLOS:[c],goleiros=gf==='todos'?GS:[gf];
     let entries=[];
@@ -575,6 +659,7 @@ async function searchHist(){
         }
       }
     }
+    if(catf!=='todos')entries=entries.filter(e=>e.cat===catf);
     entries.sort((a,b)=>b.ts.localeCompare(a.ts));
     lastHistEntries=entries;
     const tot=entries.length,fnd=entries.filter(e=>e.found).length;
@@ -587,11 +672,11 @@ async function searchHist(){
       const t=new Date(e.ts).toLocaleTimeString('pt-BR');
       const s=e.found?'color:var(--green);font-weight:700':'color:var(--red);font-weight:700';
       const cl=(e.rc||'').toLowerCase();
-      return`<tr><td style="font-family:monospace;font-size:.77rem">${t}</td><td style="font-family:monospace;font-size:.77rem">${esc(e.id)}</td><td style="${s}">${esc(e.rota)}</td><td>${cl?`<span class="cb ${cl}">${e.rc}</span>`:'—'}</td><td style="font-size:.8rem;color:var(--muted)">${GNAMES[e._g]||e._g}</td></tr>`;
-    }).join(''):'<tr class="empty"><td colspan="5">Sem dados</td></tr>';
+      return`<tr><td style="font-family:monospace;font-size:.77rem">${t}</td><td style="font-family:monospace;font-size:.77rem">${esc(e.id)}</td><td style="${s}">${esc(e.rota)}</td><td>${cl?`<span class="cb ${cl}">${e.rc}</span>`:'—'}</td><td style="font-size:.8rem;color:var(--muted)">${GNAMES[e._g]||e._g}</td><td><span class="cat-badge">${esc(e.cat||'—')}</span></td></tr>`;
+    }).join(''):'<tr class="empty"><td colspan="6">Sem dados</td></tr>';
   }catch(err){
     el('h-rb').innerHTML='<tr class="empty"><td colspan="3">Erro ao carregar</td></tr>';
-    el('h-sb').innerHTML='<tr class="empty"><td colspan="5">Erro: '+err.message+'</td></tr>';
+    el('h-sb').innerHTML='<tr class="empty"><td colspan="6">Erro: '+err.message+'</td></tr>';
   }
 }
 
@@ -605,41 +690,41 @@ async function clearHistDate(){
 function dlHist(){
   if(!lastHistEntries.length){alert('Faça uma busca antes de baixar.');return;}
   const date=el('hDate').value,c=el('hCiclo').value,gf=el('hGoleiro').value;
-  const hdr='Horário,PACOTES_ID,ROTA OT,Ciclo,Goleiro,Status';
-  const rows=lastHistEntries.map(e=>[e.ts,e.id,e.rota,e.rc||'—',GNAMES[e._g]||e._g,e.found?'Com Rota':'Sem Rota'].join(','));
+  const hdr='Horário,PACOTES_ID,ROTA OT,Ciclo,Goleiro,Categoria,Status';
+  const rows=lastHistEntries.map(e=>[e.ts,e.id,e.rota,e.rc||'—',GNAMES[e._g]||e._g,e.cat||'—',e.found?'Com Rota':'Sem Rota'].join(','));
   triggerDL('﻿'+hdr+'\n'+rows.join('\n'),`goleiro_hist_${date}_${c}_${gf}.csv`);
 }
 
 function triggerDL(content,name){const blob=new Blob([content],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
 
-// Helpers
+// ─── Helpers ───
 const el=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function setSpill(t,txt){const p=el('spill');p.className='spill '+t;p.querySelector('.sdot').className='sdot'+(t==='loading'?' pulse':'');el('spillTxt').textContent=txt;}
 function focusActive(){const i=el(activeTab==='am'?'inp-am':activeTab==='pm'?'inp-pm':null);if(i){i.focus();i.select();}}
 
-// Extrai o ID do QR (formato: ^id^Ç^47742356790^,^t^Ç^lm^...)
-// Se não for QR estruturado, retorna o valor bruto
 function parseBarcode(raw){
   const m=raw.match(/\^id\^[^a-zA-Z0-9]*\^?([0-9]+)\^?/);
   if(m)return m[1].trim();
-  // fallback: pega só os dígitos se tiver pelo menos 8 seguidos
   const digits=raw.match(/\d{8,}/);
   if(digits)return digits[0];
   return raw.trim();
 }
 
-// Events
+// ─── Events ───
 el('inp-am').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=parseBarcode(e.target.value);e.target.value='';scan(v,'AM');});
 el('inp-pm').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=parseBarcode(e.target.value);e.target.value='';scan(v,'PM');});
 document.addEventListener('click',e=>{if(!e.target.closest('input,button,select,.gbtn'))focusActive();});
 el('hDate').addEventListener('change',searchHist);
 el('hCiclo').addEventListener('change',searchHist);
 el('hGoleiro').addEventListener('change',searchHist);
+el('hCategoria').addEventListener('change',searchHist);
 
-// Boot
+// ─── Boot ───
 window.addEventListener('load',()=>{
   buildSidebars();
+  buildCatTabs('AM');
+  buildCatTabs('PM');
   el('hDate').value=today();
   focusActive();
   loadSheet();
